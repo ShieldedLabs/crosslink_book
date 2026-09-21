@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-set -efuo pipefail
+set -efuox pipefail
 
 SCRIPT_NAME="$(basename "$0")"
 
