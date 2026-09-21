@@ -24,7 +24,12 @@ function main
   generate-index > "$PAGES_INDEX"
 
   git add "$PAGES_DIR"
-  git commit -m "Update multi-branch index with \"$to_render\" rendering."
+  if git diff --cached --quiet
+  then
+    echo "The rendered output is unchanged; no render commit is needed."
+  else
+    git commit -m "Update multi-branch index with \"$to_render\" rendering."
+  fi
   git-show-tip
 
   sed 's/^    //' <<__EOF
@@ -179,14 +184,23 @@ function generate-index
         <ul>
 __EOF
 
-  while IFS= read -r -d '' b
+  local render_path
+  while IFS= read -r -d '' render_path
   do
+    local b="${render_path#"$PAGES_BRANCHES"/}"
     local escaped_branch
     local encoded_branch
     escaped_branch="$(html-escape "$b")"
-    encoded_branch="$(url-encode-path-segment "$b")"
+    encoded_branch="$(url-encode-path "$b")"
     echo "      <li><a href=\"./branches/${encoded_branch}/index.html\">${escaped_branch}</a></li>"
-  done < <(find "$PAGES_BRANCHES" -mindepth 1 -maxdepth 1 -type d -printf '%f\0' | sort -z)
+  done < <(
+    find "$PAGES_BRANCHES" \
+      -mindepth 2 \
+      -type f \
+      -name .nojekyll \
+      -printf '%h\0' \
+      | sort -z
+  )
 
   sed 's/^    //' <<__EOF
         </ul>
@@ -223,7 +237,7 @@ print(html.escape(sys.argv[1], quote=True), end="")
 ' "$1"
 }
 
-function url-encode-path-segment
+function url-encode-path
 {
   [[ $# -eq 1 ]]
 
@@ -231,7 +245,7 @@ function url-encode-path-segment
 import sys
 import urllib.parse
 
-print(urllib.parse.quote(sys.argv[1], safe=""), end="")
+print(urllib.parse.quote(sys.argv[1], safe="/"), end="")
 ' "$1"
 }
 
