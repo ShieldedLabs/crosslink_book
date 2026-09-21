@@ -181,7 +181,9 @@ __EOF
 
   while IFS= read -r -d '' b
   do
-    echo "      <li><a href=\"./branches/${b}/index.html\">${b}</a></li>"
+    local escaped_branch
+    escaped_branch="$(html-escape "$b")"
+    echo "      <li><a href=\"./branches/${escaped_branch}/index.html\">${escaped_branch}</a></li>"
   done < <(find "$PAGES_BRANCHES" -mindepth 1 -maxdepth 1 -type d -printf '%f\0' | sort -z)
 
   sed 's/^    //' <<__EOF
@@ -205,6 +207,18 @@ function rmdir-recursive-if-there
   then
     rm -r "$1"
   fi
+}
+
+function html-escape
+{
+  [[ $# -eq 1 ]]
+
+  python3 -c '
+import html
+import sys
+
+print(html.escape(sys.argv[1], quote=True), end="")
+' "$1"
 }
 
 function book-configures-mermaid-preprocessor
