@@ -152,10 +152,13 @@ function render-latest-branch
   echo "Rendering the \"$to_render\" contents..."
   command -v mdbook > /dev/null \
     || usage-error 'expected `mdbook` on PATH; run inside the configured Nix environment'
-  command -v mdbook-mermaid > /dev/null \
-    || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
   rmdir-recursive-if-there "$RENDERED_DIR"
-  mdbook-mermaid install
+  if grep -q '^\[preprocessor\.mermaid\]' book.toml
+  then
+    command -v mdbook-mermaid > /dev/null \
+      || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
+    mdbook-mermaid install
+  fi
   mdbook build
 
   local render_path="$PAGES_BRANCHES/$to_render"
