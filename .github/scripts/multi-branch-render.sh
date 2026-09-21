@@ -153,7 +153,7 @@ function render-latest-branch
   command -v mdbook > /dev/null \
     || usage-error 'expected `mdbook` on PATH; run inside the configured Nix environment'
   rmdir-recursive-if-there "$RENDERED_DIR"
-  if grep -q '^\[preprocessor\.mermaid\]' book.toml
+  if [[ -f book.toml ]] && grep -q '^\[preprocessor\.mermaid\]' book.toml
   then
     command -v mdbook-mermaid > /dev/null \
       || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
