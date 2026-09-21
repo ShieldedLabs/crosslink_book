@@ -182,8 +182,10 @@ __EOF
   while IFS= read -r -d '' b
   do
     local escaped_branch
+    local encoded_branch
     escaped_branch="$(html-escape "$b")"
-    echo "      <li><a href=\"./branches/${escaped_branch}/index.html\">${escaped_branch}</a></li>"
+    encoded_branch="$(url-encode-path-segment "$b")"
+    echo "      <li><a href=\"./branches/${encoded_branch}/index.html\">${escaped_branch}</a></li>"
   done < <(find "$PAGES_BRANCHES" -mindepth 1 -maxdepth 1 -type d -printf '%f\0' | sort -z)
 
   sed 's/^    //' <<__EOF
@@ -218,6 +220,18 @@ import html
 import sys
 
 print(html.escape(sys.argv[1], quote=True), end="")
+' "$1"
+}
+
+function url-encode-path-segment
+{
+  [[ $# -eq 1 ]]
+
+  python3 -c '
+import sys
+import urllib.parse
+
+print(urllib.parse.quote(sys.argv[1], safe=""), end="")
 ' "$1"
 }
 
