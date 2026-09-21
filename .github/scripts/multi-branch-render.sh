@@ -212,12 +212,17 @@ function book-configures-mermaid-preprocessor
   [[ $# -eq 0 ]]
   [[ -f book.toml ]] || return 1
 
-  python3 - <<'__EOF'
+  local status=0
+
+  python3 - <<'__EOF' || status=$?
 import pathlib
 import re
 import sys
 
-book_toml = pathlib.Path("book.toml").read_text(encoding="utf-8")
+try:
+    book_toml = pathlib.Path("book.toml").read_text(encoding="utf-8")
+except (OSError, UnicodeDecodeError):
+    sys.exit(2)
 
 try:
     import tomllib
@@ -230,12 +235,24 @@ else:
     try:
         book = tomllib.loads(book_toml)
     except Exception:
-        has_mermaid = False
+        has_mermaid = any(
+            re.match(r"^\s*\[preprocessor\.mermaid\]\s*(?:#.*)?$", line)
+            for line in book_toml.splitlines()
+        )
     else:
         has_mermaid = "mermaid" in book.get("preprocessor", {})
 
 sys.exit(0 if has_mermaid else 1)
 __EOF
+
+  case "$status" in
+    0|1)
+      return "$status"
+      ;;
+    *)
+      usage-error 'unable to read `book.toml` for mermaid preprocessor detection'
+      ;;
+  esac
 }
 
 function usage-error
