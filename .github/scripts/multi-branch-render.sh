@@ -150,6 +150,10 @@ function render-latest-branch
   [[ $# -eq 1 ]] && local to_render="$1"
 
   echo "Rendering the \"$to_render\" contents..."
+  command -v mdbook > /dev/null \
+    || usage-error 'expected `mdbook` on PATH; run inside the configured Nix environment'
+  command -v mdbook-mermaid > /dev/null \
+    || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
   rmdir-recursive-if-there "$RENDERED_DIR"
   mdbook-mermaid install
   mdbook build
