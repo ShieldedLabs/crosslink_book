@@ -8,7 +8,7 @@ PAGES_DIR='docs'
 PAGES_INDEX="${PAGES_DIR}/index.html"
 PAGES_BRANCHES="${PAGES_DIR}/branches"
 
-RENDERED_DIR="rendered"
+RENDERED_DIR="book"
 
 function main
 {
@@ -53,7 +53,7 @@ function expect-git-clean
   tl="$(git rev-parse --show-toplevel)"
 
   local pwd
-  pwd="$(readlink -f "$PWD")"
+  pwd="$(pwd -P)"
 
   [[ "$tl" == "$pwd" ]] \
    || usage-error "expected to be in working tree root \"$tl\" rather than \"$pwd\""
@@ -151,7 +151,8 @@ function render-latest-branch
 
   echo "Rendering the \"$to_render\" contents..."
   rmdir-recursive-if-there "$RENDERED_DIR"
-  make
+  mdbook-mermaid install
+  mdbook build
 
   local render_path="$PAGES_BRANCHES/$to_render"
 
@@ -173,7 +174,7 @@ __EOF
 
   for b in $(ls "$PAGES_BRANCHES" | sort)
   do
-    echo "      <li><a href="./branches/${b}/index.html">${b}</a></li>"
+    echo "      <li><a href=\"./branches/${b}/index.html\">${b}</a></li>"
   done
 
   sed 's/^    //' <<__EOF
