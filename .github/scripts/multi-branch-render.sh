@@ -214,13 +214,23 @@ function book-configures-mermaid-preprocessor
 
   python3 - <<'__EOF'
 import pathlib
+import re
 import sys
-import tomllib
 
-with pathlib.Path("book.toml").open("rb") as fh:
-    book = tomllib.load(fh)
+book_toml = pathlib.Path("book.toml").read_text(encoding="utf-8")
 
-sys.exit(0 if "mermaid" in book.get("preprocessor", {}) else 1)
+try:
+    import tomllib
+except ImportError:
+    has_mermaid = any(
+        re.match(r"^\s*\[preprocessor\.mermaid\]\s*(?:#.*)?$", line)
+        for line in book_toml.splitlines()
+    )
+else:
+    book = tomllib.loads(book_toml)
+    has_mermaid = "mermaid" in book.get("preprocessor", {})
+
+sys.exit(0 if has_mermaid else 1)
 __EOF
 }
 
