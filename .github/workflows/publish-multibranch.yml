@@ -9,12 +9,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 # Allow only one concurrent deployment, skipping runs queued between the run
 # in-progress and latest queued. However, do NOT cancel in-progress runs as we
 # want to allow these production deployments to complete.
@@ -25,6 +19,9 @@ concurrency:
 jobs:
   render-and-publish-multibranch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: read
 
     steps:
       - name: Setup Pages
@@ -57,3 +54,23 @@ jobs:
 
       - name: Push to `gh-pages`
         run: git push origin gh-pages:gh-pages
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: docs
+
+  deploy-pages:
+    needs: render-and-publish-multibranch
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
