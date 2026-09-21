@@ -157,7 +157,7 @@ function render-latest-branch
   then
     command -v mdbook-mermaid > /dev/null \
       || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
-    mdbook-mermaid install
+    mdbook-mermaid install .
   fi
   mdbook build
 
