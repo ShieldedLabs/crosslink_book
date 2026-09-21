@@ -179,10 +179,10 @@ function generate-index
         <ul>
 __EOF
 
-  for b in $(ls "$PAGES_BRANCHES" | sort)
+  while IFS= read -r -d '' b
   do
     echo "      <li><a href=\"./branches/${b}/index.html\">${b}</a></li>"
-  done
+  done < <(find "$PAGES_BRANCHES" -mindepth 1 -maxdepth 1 -type d -printf '%f\0' | sort -z)
 
   sed 's/^    //' <<__EOF
         </ul>
