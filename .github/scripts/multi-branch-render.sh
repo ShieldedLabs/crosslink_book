@@ -227,8 +227,12 @@ except ImportError:
         for line in book_toml.splitlines()
     )
 else:
-    book = tomllib.loads(book_toml)
-    has_mermaid = "mermaid" in book.get("preprocessor", {})
+    try:
+        book = tomllib.loads(book_toml)
+    except Exception:
+        has_mermaid = False
+    else:
+        has_mermaid = "mermaid" in book.get("preprocessor", {})
 
 sys.exit(0 if has_mermaid else 1)
 __EOF
