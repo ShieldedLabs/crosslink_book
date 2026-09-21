@@ -8,7 +8,7 @@ PAGES_DIR='docs'
 PAGES_INDEX="${PAGES_DIR}/index.html"
 PAGES_BRANCHES="${PAGES_DIR}/branches"
 
-RENDERED_DIR="book"
+RENDERED_DIR="rendered"
 
 function main
 {
@@ -159,7 +159,7 @@ function render-latest-branch
       || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
     mdbook-mermaid install .
   fi
-  mdbook build
+  mdbook build -d "$RENDERED_DIR"
 
   local render_path="$PAGES_BRANCHES/$to_render"
 
