@@ -264,7 +264,7 @@ __EOF
       return "$status"
       ;;
     *)
-      usage-error 'unable to read `book.toml` for mermaid preprocessor detection'
+      return 1
       ;;
   esac
 }
