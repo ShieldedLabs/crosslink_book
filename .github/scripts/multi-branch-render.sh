@@ -153,7 +153,7 @@ function render-latest-branch
   command -v mdbook > /dev/null \
     || usage-error 'expected `mdbook` on PATH; run inside the configured Nix environment'
   rmdir-recursive-if-there "$RENDERED_DIR"
-  if [[ -f book.toml ]] && grep -q '^[[:space:]]*\[preprocessor\.mermaid\]' book.toml
+  if book-configures-mermaid-preprocessor
   then
     command -v mdbook-mermaid > /dev/null \
       || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
@@ -205,6 +205,23 @@ function rmdir-recursive-if-there
   then
     rm -r "$1"
   fi
+}
+
+function book-configures-mermaid-preprocessor
+{
+  [[ $# -eq 0 ]]
+  [[ -f book.toml ]] || return 1
+
+  python3 - <<'__EOF'
+import pathlib
+import sys
+import tomllib
+
+with pathlib.Path("book.toml").open("rb") as fh:
+    book = tomllib.load(fh)
+
+sys.exit(0 if "mermaid" in book.get("preprocessor", {}) else 1)
+__EOF
 }
 
 function usage-error
