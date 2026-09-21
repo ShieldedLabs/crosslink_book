@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-set -efuo pipefail
+set -efuox pipefail
 
 SCRIPT_NAME="$(basename "$0")"
 
@@ -24,7 +24,12 @@ function main
   generate-index > "$PAGES_INDEX"
 
   git add "$PAGES_DIR"
-  git commit -m "Update multi-branch index with \"$to_render\" rendering."
+  if git diff --cached --quiet
+  then
+    echo "The rendered output is unchanged; no render commit is needed."
+  else
+    git commit -m "Update multi-branch index with \"$to_render\" rendering."
+  fi
   git-show-tip
 
   sed 's/^    //' <<__EOF
@@ -53,7 +58,7 @@ function expect-git-clean
   tl="$(git rev-parse --show-toplevel)"
 
   local pwd
-  pwd="$(readlink -f "$PWD")"
+  pwd="$(pwd -P)"
 
   [[ "$tl" == "$pwd" ]] \
    || usage-error "expected to be in working tree root \"$tl\" rather than \"$pwd\""
@@ -150,8 +155,16 @@ function render-latest-branch
   [[ $# -eq 1 ]] && local to_render="$1"
 
   echo "Rendering the \"$to_render\" contents..."
+  command -v mdbook > /dev/null \
+    || usage-error 'expected `mdbook` on PATH; run inside the configured Nix environment'
   rmdir-recursive-if-there "$RENDERED_DIR"
-  make
+  if book-configures-mermaid-preprocessor
+  then
+    command -v mdbook-mermaid > /dev/null \
+      || usage-error 'expected `mdbook-mermaid` on PATH; run inside the configured Nix environment'
+    mdbook-mermaid install .
+  fi
+  mdbook build -d "$RENDERED_DIR"
 
   local render_path="$PAGES_BRANCHES/$to_render"
 
@@ -171,10 +184,23 @@ function generate-index
         <ul>
 __EOF
 
-  for b in $(ls "$PAGES_BRANCHES" | sort)
+  local render_path
+  while IFS= read -r -d '' render_path
   do
-    echo "      <li><a href="./branches/${b}/index.html">${b}</a></li>"
-  done
+    local b="${render_path#"$PAGES_BRANCHES"/}"
+    local escaped_branch
+    local encoded_branch
+    escaped_branch="$(html-escape "$b")"
+    encoded_branch="$(url-encode-path "$b")"
+    echo "      <li><a href=\"./branches/${encoded_branch}/index.html\">${escaped_branch}</a></li>"
+  done < <(
+    find "$PAGES_BRANCHES" \
+      -mindepth 2 \
+      -type f \
+      -name .nojekyll \
+      -printf '%h\0' \
+      | sort -z
+  )
 
   sed 's/^    //' <<__EOF
         </ul>
@@ -197,6 +223,78 @@ function rmdir-recursive-if-there
   then
     rm -r "$1"
   fi
+}
+
+function html-escape
+{
+  [[ $# -eq 1 ]]
+
+  python3 -c '
+import html
+import sys
+
+print(html.escape(sys.argv[1], quote=True), end="")
+' "$1"
+}
+
+function url-encode-path
+{
+  [[ $# -eq 1 ]]
+
+  python3 -c '
+import sys
+import urllib.parse
+
+print(urllib.parse.quote(sys.argv[1], safe="/"), end="")
+' "$1"
+}
+
+function book-configures-mermaid-preprocessor
+{
+  [[ $# -eq 0 ]]
+  [[ -f book.toml ]] || return 1
+
+  local status=0
+
+  python3 - <<'__EOF' || status=$?
+import pathlib
+import re
+import sys
+
+try:
+    book_toml = pathlib.Path("book.toml").read_text(encoding="utf-8")
+except (OSError, UnicodeDecodeError):
+    sys.exit(2)
+
+try:
+    import tomllib
+except ImportError:
+    has_mermaid = any(
+        re.match(r"^\s*\[preprocessor\.mermaid\]\s*(?:#.*)?$", line)
+        for line in book_toml.splitlines()
+    )
+else:
+    try:
+        book = tomllib.loads(book_toml)
+    except Exception:
+        has_mermaid = any(
+            re.match(r"^\s*\[preprocessor\.mermaid\]\s*(?:#.*)?$", line)
+            for line in book_toml.splitlines()
+        )
+    else:
+        has_mermaid = "mermaid" in book.get("preprocessor", {})
+
+sys.exit(0 if has_mermaid else 1)
+__EOF
+
+  case "$status" in
+    0|1)
+      return "$status"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
 }
 
 function usage-error
