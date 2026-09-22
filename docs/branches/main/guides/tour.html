@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Rewards Distribution - Zcash Crosslink: A Visual Tour</title>
+        <title>A Visual Tour of Zcash Crosslink - Zcash Crosslink: A Visual Tour</title>
 
 
         <!-- Custom HTML head -->
@@ -12,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -35,7 +35,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="tour.html"><strong aria-hidden="true">1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="rewards-distribution.html" class="active"><strong aria-hidden="true">2.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li><li class="chapter-item expanded "><a href="tfl-lexicon.html"><strong aria-hidden="true">4.</strong> TFL Book Lexicon</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="consensus-verifiability.html"><strong aria-hidden="true">5.</strong> APPENDIX A. Consensus Verifiability</a></li><li class="chapter-item expanded "><a href="mermaid-styles.html"><strong aria-hidden="true">6.</strong> APPENDIX B. Mermaid Common Styles</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html" class="active"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">5.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -144,7 +144,7 @@
                     <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -174,41 +174,54 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="rewards-distribution"><a class="header" href="#rewards-distribution">Rewards Distribution</a></h1>
-<p>Here we give an overview of how the Zcash protocol with Crosslink enabled distributes protocol rewards.</p>
-<h2 id="the-supply-distribution-rules"><a class="header" href="#the-supply-distribution-rules">The Supply Distribution Rules</a></h2>
-<p>We conceptualize all abstract rules about the <code>ZEC</code> asset's ownership and accounting as the <em>Supply Distribution Rules</em>. These are an abstraction which is codified and implemented by a more concrete consensus protocol, and even more concrete running software.</p>
-<h3 id="top-line-rules"><a class="header" href="#top-line-rules">Top-Line Rules</a></h3>
-<ul>
-<li><code>ZEC</code> must be scarce, with every unit accounted for by the consensus protocol, all adding up to the <em>Max Supply Cap</em> of 21,000,000.</li>
-<li>The consensus protocol constrains <code>ZEC</code> transfers, either between users, or between the protocol and users. All such transfers maintain <em>Supply Integrity</em> by ensuring the same number of units transferred away from a set of sources are distributed to a set of recipients.</li>
-<li><code>ZEC</code> is divided between <em>Unissued Supply</em> versus <em>Active Supply</em>, with the total of these two categories being the Max Supply Cap.</li>
-<li>The consensus protocol <em>issues</em> new <code>ZEC</code> units by transferring them out of the Unissued Supply to any user or protocol-managed destination.</li>
-<li><code>ZEC</code> is <em>issued</em> by the protocol at a predictable constrained rate, the <em>Issuance Schedule</em>, which asymptotically approaches 0 over time.
-<ul>
-<li>Details:
-<ul>
-<li>The rate is time-approximate by relying on per-block accounting on the assumption that the block production rate is approximately constant.</li>
-<li>The rate currently follows the Bitcoin-like "four year halving" schedule, although it may be adjusted by the <em>Network Sustainability Mechanism</em> or other changes which alter this "fine-grained" detail of the issuance rate.</li>
-</ul>
-</li>
-<li>The protocol <em>issues</em> <code>ZEC</code> by subtracting a number of units defined by the Issuance Schedule from the Unissued Supply and adding that into the Active Supply as part of the <em>Protocol Rewards</em>.</li>
-</ul>
-</li>
-<li>The consensus protocol enables and constrains the <code>ZEC</code> supply to change</li>
-</ul>
-<h4 id="consensus-rewards-distribution"><a class="header" href="#consensus-rewards-distribution">Consensus Rewards Distribution</a></h4>
-<h2 id="operational-consensus-rewards"><a class="header" href="#operational-consensus-rewards">Operational Consensus Rewards</a></h2>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; conflict 1 of 1
+%%%%%%% diff from: uxxzmllw dede11ff "Link to the rendering on <code>README.md</code>." (parents of rebased revision)
+\\\\        to: roozrokx 0e4800bb "Merge branch 'dev'" (rebase destination)</p>
+<h1 id="a-visual-tour-of-zcash-crosslink"><a class="header" href="#a-visual-tour-of-zcash-crosslink">A Visual Tour of Zcash Crosslink</a></h1>
+<h2 id="zcash-pow"><a class="header" href="#zcash-pow">Zcash PoW</a></h2>
+<p>-Currently the Zcash Mainnet uses consensus rules defined by Network Upgrade 6.1. This relies on a Bitcoin-like PoW consensus mechanism, which enables partition-tolerant high availability at the cost of forks / rollbacks. Here's a conceptual diagram of PoW blocks pointing to their parents (via <code>prevhash</code> header fields) which shows two objectively-verifiable histories leading back from PoW blocks <em>B₃</em> and <em>B₂'</em>, with <em>B₃</em> being the longer:
++Currently the Zcash Mainnet uses consensus rules defined by Network Upgrade 6.3. This relies on a Bitcoin-like PoW consensus mechanism, which enables partition-tolerant high availability at the cost of forks / rollbacks. Here's a conceptual diagram of PoW blocks pointing to their parents (via <code>prevhash</code> header fields) which shows two objectively-verifiable histories leading back from PoW blocks <em>B₃</em> and <em>B₂'</em>, with <em>B₃</em> being the longer:</p>
+<pre class="mermaid">graph TD
+     B3([B₃]):::pow --&gt; B2([B₂]):::pow
+     B2 --&gt; B1([B₁]):::pow
+     B1 --&gt; B0([B₀]):::pow
+ 
+     %% A split history:
+     B2b([B₂']):::powAlt --&gt; B1b([B₁']):::powAlt
+     B1b --&gt; B0
+ 
+     %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+     %% Define PoW block style with dark blue border and oval shape
+     classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+     %% Define alternative PoW block style with orange fill for caution
+     classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+</pre>
+<p>+++++++ vnlxmrno d0cbf90f "A first pass at Crosslink Rewards Distribution accounting rules." (rebased revision)</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>conflict 1 of 1 ends</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="tour.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../crosslink-design-overview-20260914.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="crosslink-design-overview-20260914.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../guides/tfl-lexicon.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -218,11 +231,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="tour.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../crosslink-design-overview-20260914.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="crosslink-design-overview-20260914.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../guides/tfl-lexicon.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
@@ -237,18 +250,18 @@
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="mermaid.min.js"></script>
-        <script src="mermaid-init.js"></script>
-        <script src="mermaid-common-styles.js"></script>
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
 
 
     </div>
