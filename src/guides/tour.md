@@ -1,6 +1,3 @@
-<<<<<<< conflict 1 of 1
-%%%%%%% diff from: uxxzmllw dede11ff "Link to the rendering on `README.md`." (parents of rebased revision)
-\\\\\\\        to: roozrokx 0e4800bb "Merge branch 'dev'" (rebase destination)
  # A Visual Tour of Zcash Crosslink
  
  ## Zcash PoW
@@ -24,5 +21,3 @@
      %% Define alternative PoW block style with orange fill for caution
      classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
  ```
-+++++++ vnlxmrno d0cbf90f "A first pass at Crosslink Rewards Distribution accounting rules." (rebased revision)
->>>>>>> conflict 1 of 1 ends
