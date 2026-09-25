@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>APPENDIX B. Mermaid Common Styles - Zcash Crosslink: A Visual Tour</title>
+        <title>Consensus Verifiability - Zcash Crosslink: A Visual Tour</title>
 
 
         <!-- Custom HTML head -->
@@ -12,21 +12,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
 
-        <link rel="icon" href="favicon.svg">
-        <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
 
         <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
@@ -35,7 +35,7 @@
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
-            var path_to_root = "";
+            var path_to_root = "../";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="tour.html"><strong aria-hidden="true">1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="rewards-distribution.html"><strong aria-hidden="true">2.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="FINALITY.html"><strong aria-hidden="true">3.</strong> Zebra Crosslink Codebase: Finality Semantics</a></li><li class="chapter-item expanded "><a href="crosslink-design-overview-20260914.html"><strong aria-hidden="true">4.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li><li class="chapter-item expanded "><a href="tfl-lexicon.html"><strong aria-hidden="true">5.</strong> TFL Book Lexicon</a></li><li class="chapter-item expanded affix "><li class="spacer"></li><li class="chapter-item expanded "><a href="consensus-verifiability.html"><strong aria-hidden="true">6.</strong> APPENDIX A. Consensus Verifiability</a></li><li class="chapter-item expanded "><a href="mermaid-styles.html" class="active"><strong aria-hidden="true">7.</strong> APPENDIX B. Mermaid Common Styles</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html" class="active"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li><li class="chapter-item expanded "><a href="../FINALITY.html"><strong aria-hidden="true">3.3.</strong> Zebra Crosslink Codebase: Finality Semantics</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">5.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -144,7 +144,7 @@
                     <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
 
@@ -174,48 +174,35 @@
                 <div id="content" class="content">
                     <main>
                         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
-<h1 id="mermaid-common-styles"><a class="header" href="#mermaid-common-styles">Mermaid Common Styles</a></h1>
-<p>This file contains reusable Mermaid style definitions for diagrams throughout the book.</p>
-<h2 id="how-to-use"><a class="header" href="#how-to-use">How to Use</a></h2>
-<p>Copy the relevant style definitions from this page into your Mermaid diagrams. While the styles are also defined in <code>mermaid-common-styles.js</code> for potential programmatic use, Mermaid requires <code>classDef</code> statements to be included within each diagram block.</p>
-<h2 id="pow-block-styles"><a class="header" href="#pow-block-styles">PoW Block Styles</a></h2>
-<p>For Proof-of-Work blockchain diagrams:</p>
-<pre><code class="language-text">%% Define PoW block style with dark blue border and oval shape
-classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
-%% Define alternative PoW block style with orange fill for caution
-classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
-</code></pre>
-<h3 id="usage-example"><a class="header" href="#usage-example">Usage Example</a></h3>
-<pre class="mermaid">graph TD
-    Block_0([B₀]):::pow
-    Block_1([B₁]):::pow
-    Block_1_alt([B₁']):::powAlt
-
-    Block_1 --&gt; Block_0
-    Block_1_alt --&gt; Block_0
-
-    %% Define PoW block style with dark blue border and oval shape
-    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
-    %% Define alternative PoW block style with orange fill for caution
-    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
-</pre>
-<h2 id="node-type-styles"><a class="header" href="#node-type-styles">Node Type Styles</a></h2>
-<p>Standard node types used across diagrams:</p>
-<pre><code class="language-text">classDef input fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
-classDef compute fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
-classDef aggregate fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
-classDef output fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px,color:#000
-classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
-</code></pre>
+<h1 id="consensus-verifiability"><a class="header" href="#consensus-verifiability">Consensus Verifiability</a></h1>
+<p>The primary purpose of cryptographic consensus protocols is to enable people to interact with strangers all over the world where a person's locally controlled software can provide safe, timely guarantees that some globally available state was updated through an interaction.</p>
+<p>To do this, a person's software needs to be able to <em>verify</em> that a particular interaction resulted in a change to some globally available state and the resuling state is <em>valid</em> according to a set of pre-defined rules.</p>
+<p>Unfortunately, "global state" is a useful fiction:</p>
+<h3 id="objectivity-and-subjectivity-in-consensus"><a class="header" href="#objectivity-and-subjectivity-in-consensus">Objectivity and Subjectivity in Consensus</a></h3>
+<h4 id="objective-verifiability"><a class="header" href="#objective-verifiability">Objective Verifiability</a></h4>
+<p>Verifying nodes run software which <em>verifies</em> whether a particular ledge history is valid according to consensus rules, which all nodes must agree on to arrive at the same view of the network's ledger. In order to ensure any two nodes would arrive at the same decision as to whether a given history is valid or not, their decision must be <em>objectively verifiable</em>. Precisely:</p>
+<blockquote>
+<p>An <strong>objectively verifiable</strong> property of a ledger history can be computed using <em>only</em> that ledger history as input.</p>
+</blockquote>
+<p>Objectively verifiable properties include all of the <em>ledger state</em> that users care about: balances, when transfers occurred, what authorization criteria were fulfilled to enable a transfer, the current total supply, the supply totals for different shielded pools, how changes to balances and ownership were bundled into (objectively verifiable) transactions, and so forth.</p>
+<p>By relying <em>only</em> on the ledger history, and not any other auxillary, node-specific information, a node ensures that a property it verifies is the same value any other node would verify from that same history. If nodes relied on non-objective input to their verification process, they would lose the guarantee that other nodes would arrive at the same conclusion for a given history.</p>
+<p>The top-line objectively verifiable property of a ledger history is a boolean value: <em>consensus-valid</em>. By accurately <em>excluding</em> any ledger history which is not objectively verifiable as consensus-valid, nodes protect their users from large categories of malice and accident with respect to the ledger state.</p>
+<h4 id="intersubjectivity"><a class="header" href="#intersubjectivity">Intersubjectivity</a></h4>
+<p>Nodes, like people, are immersed in subjectivity. Local data and code can compute values locally, which nodes can then rely on innately through the magic of computation, but there's no a priori guarantee any other entity has access to the the same input or calculated data. Furthermore, if presented with arbitrary data along with a claim that it is a conclusion or result of some kind of verification, a node can only rely on this claim by either performing their own verification locally, or relying on the third party as an authority (or anyone who can foil authentication attempts of that authority).</p>
+<p>When performing local verification, a wonderful advancement Zcash in particular has leveraged are proofs-of-integrity which allow verifying a claim objectively without needing to reproduce all of the original input data and direct calculation steps.</p>
+<p>However, none of this can</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="consensus-verifiability.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="../spec/rewards-distribution.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -223,10 +210,13 @@ classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="consensus-verifiability.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="../spec/rewards-distribution.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -239,18 +229,18 @@ classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
         </script>
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
 
         <!-- Custom JS scripts -->
-        <script src="mermaid.min.js"></script>
-        <script src="mermaid-init.js"></script>
-        <script src="mermaid-common-styles.js"></script>
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
 
 
     </div>
