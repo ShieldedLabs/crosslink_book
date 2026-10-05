@@ -268,6 +268,73 @@ The floor is the node's own `fin` (`local_finalized_tip`), not the BFT snapshot.
 
 where `LF(best)` is the TFC the tip's `context_bft` points at, and `prune_σ(C)` is C with its last `σ` blocks removed. If `fin` is an ancestor of or equal to the candidate, `fin` := candidate. Otherwise `fin` stays put. So `fin` only advances along the node's own best chain, only to blocks the node has itself buried `σ` deep, and never backwards.
 
+The walk that computes the candidate, with `σ` = 4 and best tip `P10`. Newer blocks are at the top, and each arrow points from a block to something it names:
+
+```mermaid
+graph TD
+    subgraph bftChain ["BFT chain"]
+        T6("TFC 6 · LF(P10)<br/>headers_bc =<br/>[P6, P7, P8, P9]"):::lf
+        T5("TFC 5"):::bft
+        T4("TFC 4"):::bft
+        T3("TFC 3"):::bft
+        T2("TFC 2"):::bft
+        T1("TFC 1"):::bft
+    end
+
+    subgraph powChain ["PoW best chain"]
+        P10(["P10 · best tip"]):::pow
+        P9([P9]):::pow
+        P8([P8]):::pow
+        P7([P7]):::pow
+        P6(["P6 · prune_σ(best)"]):::pow
+        P5(["P5 · candidate(best) · fin"]):::candidate
+        P4(["P4 · fin before this update"]):::pow
+        P3([P3]):::pow
+    end
+
+    %% Parent links
+    P10 --> P9 --> P8 --> P7 --> P6 --> P5 --> P4 --> P3
+    T6 --> T5 --> T4 --> T3 --> T2 --> T1
+
+    %% Crosslinks
+    P10 -- context_bft --> T6
+    T6 -.-> P9
+    T6 -.-> P8
+    T6 -.-> P7
+    T6 -.-> P6
+    T6 == snapshot ==> P5
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+```
+
+`P10` cites TFC 6. Its dotted arrows are the `σ` headers it carries, and its snapshot is the parent of the deepest one: `P5`. `prune_σ(best)` is `P6`. So `candidate(best) = lca(P5, P6) = P5`. `fin` was `P4`, an ancestor of `P5`, so `fin` := `P5`.
+
+The update rule:
+
+```mermaid
+graph TD
+    decision(["A BFT decision arrives"]):::input --> snap["bft_final_snapshot advances.<br/>fin does not move."]:::storage
+    change(["The best chain changes"]):::input --> compute["candidate(best) =<br/>lca(snapshot(LF(best)), prune_σ(best))"]:::compute
+    compute --> test{"Is fin the candidate<br/>or an ancestor of it?"}:::compute
+    test -- yes --> advance["fin := candidate"]:::output
+    test -- no --> hold["fin stays put"]:::storage
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef input fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef compute fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef output fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px,color:#000
+    classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
+```
+
+[A Visual Guide to Finality and Fork Choice](./guides/finality-and-fork-choice.md) draws the reorg cases.
+
 ### The ratchet, step by step
 
 - A decision arrives. It advances `bft_final_snapshot` (the snapshot of the newest decided TFC), which may be on a side chain. My `fin` does not move yet.
