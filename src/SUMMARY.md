@@ -9,6 +9,7 @@
 - [Design Guides]()
   - [A Visual Tour of Zcash Crosslink](./guides/tour.md)
   - [A Visual Lexicon of the TFL Book](./guides/tfl-lexicon.md)
+  - [A Visual Guide to Finality and Fork Choice](./guides/finality-and-fork-choice.md)
 
 ---
 
