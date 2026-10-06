@@ -10,6 +10,18 @@
 - [Design Guides]()
   - [A Visual Tour of Zcash Crosslink](./guides/tour.md)
   - [A Visual Lexicon of the TFL Book](./guides/tfl-lexicon.md)
+  - [A Visual Guide to Finality and Fork Choice](./guides/finality-and-fork-choice.md)
+- [Old Design - Needs Love]()
+  - [adrs.md](./old-design/adrs.md)
+  - [analysis - FIXME not yet linked]()
+  - [cl2-construction.md](./old-design/cl2-construction.md)
+  - [deliverables.md](./old-design/deliverables.md)
+  - [five-component-model.md](./old-design/five-component-model.md)
+  - [nutshell.md](./old-design/nutshell.md)
+  - [scoping.md](./old-design/scoping.md)
+  - [security-properties.md](./old-design/security-properties.md)
+  - [terminology.md](./old-design/terminology.md)
+  - [userled-emergency-hardforks.md](./old-design/userled-emergency-hardforks.md)
 
 ---
 

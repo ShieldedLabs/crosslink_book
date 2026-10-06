@@ -34,6 +34,47 @@ graph TD
     classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
 ```
 
+## Crosslink Finality Styles
+
+For diagrams that show both chains and the finality markers, as in [A Visual Guide to Finality and Fork Choice](../guides/finality-and-fork-choice.md). Use `pow` for PoW blocks on the node's best chain and `powAlt` for PoW blocks off it.
+
+```text
+%% Define PoS / BFT block style with dark red border
+classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+%% Define style for the BFT block that a PoW block's context_bft makes final, LF(H)
+classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+%% Define style for a BFT proposal that the validity rules reject
+classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+%% Define style for the PoW block that is candidate(H), with yellow fill
+classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+%% Define fin last, so that its border wins over the block style.
+classDef fin stroke:#8e24aa,stroke-width:7px
+```
+
+`fin` only sets a border, so add it on top of a block's own style with a `class` statement, such as `class P5 fin`. Both styles then set a border, and Mermaid lets the one defined later win, so `classDef fin` must come after the others.
+
+### Usage Example
+
+```mermaid
+graph TD
+    A([pow]):::pow --> B([candidate]):::candidate
+    B --> C(["candidate + fin"]):::candidate
+    C --> D(["pow + fin"]):::pow
+    E(["powAlt + fin"]):::powAlt --> D
+    X(rejected):::rejected --> Y(lf):::lf
+    Y --> Z(bft):::bft
+    class C,D,E fin
+
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+```
+
 ## Node Type Styles
 
 Standard node types used across diagrams:
