@@ -1,0 +1,565 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>A Visual Guide to Finality and Fork Choice - Zcash Crosslink: A Visual Tour</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../guides/finality-and-fork-choice.html" class="active"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old-design/adrs.html"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="../old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="../old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="../old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="../old-design/nutshell.html"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="../old-design/scoping.html"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="../old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="../old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="../old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="a-visual-guide-to-finality-and-fork-choice"><a class="header" href="#a-visual-guide-to-finality-and-fork-choice">A Visual Guide to Finality and Fork Choice</a></h1>
+<p>A Zebra Crosslink node tracks three points on the PoW chain. This guide shows how each one is found, and what happens to them when the PoW chain reorganizes.</p>
+<ul>
+<li><strong><code>bc_best</code></strong> is the PoW chain that the node's fork choice selects, and <code>bc_best_tip</code> is its newest block. It is available but not final.</li>
+<li><strong><code>candidate(H)</code></strong> is the finalization point that a PoW block <code>H</code> and its linked ancestry imply. It is objective: every correct replay of the same <code>H</code> gets the same answer.</li>
+<li><strong><code>fin</code></strong> is the furthest compatible <code>candidate(bc_best_tip)</code> that this node has accepted across best-chain updates. It is node-local memory and never moves backward.</li>
+</ul>
+<p>A candidate can move backward without the best chain crossing <code>fin</code>; that is the <a href="#benign-case-the-candidate-moves-backward">benign case</a>. A best chain that actually forks below <code>fin</code> is a different, <a href="#exceptional-case-the-best-chain-forks-below-fin">exceptional case</a>.</p>
+<h2 id="reading-the-diagrams"><a class="header" href="#reading-the-diagrams">Reading the diagrams</a></h2>
+<p>Newer blocks are at the top. Arrows are committed references, not message flow: each one points from a block to something that block names.</p>
+<div class="table-wrapper"><table><thead><tr><th>Drawn as</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>Rounded block, blue border, white fill</td><td>PoW block on the node's best chain</td></tr>
+<tr><td>Rounded block, orange fill</td><td>PoW block off the node's best chain</td></tr>
+<tr><td>Box, red border</td><td>PoS / BFT block</td></tr>
+<tr><td>Box, pink fill</td><td><code>LF(H)</code>: the last final BFT block in the context of <code>H</code></td></tr>
+<tr><td>Box, dashed red border</td><td>BFT proposal that the validity rules reject</td></tr>
+<tr><td>Yellow fill</td><td><code>candidate(H)</code> for the best tip <code>H</code></td></tr>
+<tr><td>Thick purple border</td><td><code>fin</code></td></tr>
+<tr><td>Plain arrow</td><td>Parent link</td></tr>
+<tr><td>Arrow labelled <code>context_bft</code></td><td>The BFT block that a PoW block cites</td></tr>
+<tr><td>Dotted arrow</td><td>A PoW header carried in a BFT block's <code>headers_bc</code></td></tr>
+<tr><td>Thick arrow labelled <code>snapshot</code></td><td><code>snapshot(B)</code>: the parent of the deepest header in <code>B.headers_bc</code></td></tr>
+</tbody></table>
+</div>
+<p><code>a ⪯ b</code> means that <code>a</code> is <code>b</code> or an ancestor of <code>b</code>. Two blocks <em>conflict</em> when neither is an ancestor of the other.</p>
+<p>The styles are listed in <a href="../editing/mermaid-styles.html">Mermaid Common Styles</a>.</p>
+<h2 id="how-candidateh-crosses-both-chains"><a class="header" href="#how-candidateh-crosses-both-chains">How <code>candidate(H)</code> crosses both chains</a></h2>
+<pre class="mermaid">graph TD
+    subgraph bftChain [&quot;PoS / BFT chain&quot;]
+        S6(&quot;S6 · LF(P10)&lt;br/&gt;headers_bc = [P6, P7, P8]&quot;):::lf
+        S5(S5):::bft
+        S4(S4):::bft
+        S3(S3):::bft
+        S2(S2):::bft
+        S1(S1):::bft
+    end
+
+    subgraph powChain [&quot;PoW / bc chain&quot;]
+        P10([P10]):::pow
+        P9([P9]):::pow
+        P8([P8]):::pow
+        P7([&quot;P7 · prune_sigma(P10)&quot;]):::pow
+        P6([&quot;P6 · headers_bc[0]&quot;]):::pow
+        P5([&quot;P5 · candidate(P10)&quot;]):::candidate
+        P4([P4]):::pow
+        P3([P3]):::pow
+        P2([P2]):::pow
+    end
+
+    %% Parent links
+    P10 --&gt; P9 --&gt; P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3 --&gt; P2
+    S6 --&gt; S5 --&gt; S4 --&gt; S3 --&gt; S2 --&gt; S1
+
+    %% Crosslinks
+    P10 -- context_bft --&gt; S6
+    S6 -.-&gt; P8
+    S6 -.-&gt; P7
+    S6 -.-&gt; P6
+    S6 == snapshot ==&gt; P5
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+</pre>
+<p>Starting from <code>H = P10</code>:</p>
+<ol>
+<li><code>P10.context_bft</code> cites <code>S6</code>. Tenderlink decides each BFT block on its own, and the fat pointer in <code>context_bft</code> carries the signatures of that decision, so the cited block is final and <code>LF(P10) = S6</code>. The Book's generic BFT protocol can instead finalize an ancestor of the cited block.</li>
+<li><code>S6.headers_bc = [P6, P7, P8]</code>, deepest first. Its snapshot is the parent of <code>headers_bc[0]</code>: <code>snapshot(S6) = parent(P6) = P5</code>.</li>
+<li><code>prune_sigma(P10)</code> drops the newest <code>sigma</code> blocks: <code>P7</code> when <code>sigma = 3</code>.</li>
+<li>The candidate is the last common ancestor of those two blocks:</li>
+</ol>
+<pre><code class="language-text">candidate(P10) = lca(snapshot(LF(P10)), prune_sigma(P10)) = lca(P5, P7) = P5
+</code></pre>
+<p>The <a href="./tfl-lexicon.html">lexicon</a> quotes the Book's definitions of <code>snapshot</code>, <code>LF</code> and <code>candidate</code>.</p>
+<h2 id="all-three-values-name-pow-chain-points"><a class="header" href="#all-three-values-name-pow-chain-points">All three values name PoW-chain points</a></h2>
+<p>The PoS chain helps compute the candidate, but <code>bc_best_tip</code>, <code>candidate</code> and <code>fin</code> are all tips of PoW-chain prefixes.</p>
+<pre class="mermaid">graph TD
+    subgraph bftChain [&quot;PoS&quot;]
+        S6(&quot;S6&lt;br/&gt;headers_bc = [P6, P7, P8]&quot;):::bft
+        S5(S5):::bft
+        S4(S4):::bft
+        S3(S3):::bft
+        S2(S2):::bft
+    end
+
+    subgraph powChain [&quot;PoW&quot;]
+        P10([&quot;P10 · bc_best_tip&quot;]):::pow
+        P9([P9]):::pow
+        P8([P8]):::pow
+        P7([P7]):::pow
+        P6([P6]):::pow
+        P5([&quot;P5 · candidate(P10) · fin&quot;]):::candidate
+        P4([P4]):::pow
+        P3([P3]):::pow
+        P2([P2]):::pow
+    end
+
+    %% Parent links
+    P10 --&gt; P9 --&gt; P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3 --&gt; P2
+    S6 --&gt; S5 --&gt; S4 --&gt; S3 --&gt; S2
+
+    %% Crosslinks
+    P10 -- context_bft --&gt; S6
+    S6 -.-&gt; P8
+    S6 -.-&gt; P7
+    S6 -.-&gt; P6
+    S6 == snapshot ==&gt; P5
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<ul>
+<li><strong><code>bc_best_tip = P10</code></strong> is the fork-choice result, not finality. <code>P6</code>–<code>P10</code> are unfinalized, and no protocol rule bounds this gap: Zebra Crosslink omits Stalled Mode, so nothing limits how far the best chain runs ahead of <code>fin</code>.</li>
+<li><strong><code>candidate(P10) = P5</code></strong> is the objective result of the two-chain walk. It is pure, and it can move backward while the best chain still contains <code>fin</code>.</li>
+<li><strong><code>fin</code> advances from <code>P4</code> to <code>P5</code></strong>, because on this <code>bc_best</code> update the candidate is ahead of it. It is stateful and never rolls back locally.</li>
+</ul>
+<h2 id="benign-case-the-candidate-moves-backward"><a class="header" href="#benign-case-the-candidate-moves-backward">Benign case: the candidate moves backward</a></h2>
+<p>A shallow PoW reorg can expose an older BFT context. Its derived candidate can therefore be an ancestor of <code>fin</code>. That is not a rollback through finality: the complete new best chain still descends from <code>fin</code>.</p>
+<h3 id="before-fin-advances"><a class="header" href="#before-fin-advances">Before: <code>fin</code> advances</a></h3>
+<p><code>bc_best_tip = P10</code> cites <code>S6</code>, whose snapshot <code>P5</code> is the candidate, so <code>fin</code> advances to <code>P5</code>.</p>
+<pre class="mermaid">graph TD
+    subgraph bftChain [&quot;PoS&quot;]
+        S6(&quot;S6&lt;br/&gt;headers_bc = [P6, P7, P8]&quot;):::bft
+        S5(S5):::bft
+        S4(S4):::bft
+        S3(S3):::bft
+        S2(S2):::bft
+    end
+
+    subgraph powChain [&quot;PoW&quot;]
+        P10([&quot;P10 · bc_best_tip&quot;]):::pow
+        P9([P9]):::pow
+        P8([P8]):::pow
+        P7([P7]):::pow
+        P6([P6]):::pow
+        P5([&quot;P5 · candidate · fin&quot;]):::candidate
+        P4([P4]):::pow
+        P3([P3]):::pow
+        P2([P2]):::pow
+        P1([P1]):::pow
+    end
+
+    %% Parent links
+    P10 --&gt; P9 --&gt; P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3 --&gt; P2 --&gt; P1
+    S6 --&gt; S5 --&gt; S4 --&gt; S3 --&gt; S2
+
+    %% Crosslinks
+    P10 -- context_bft --&gt; S6
+    S6 -.-&gt; P8
+    S6 -.-&gt; P7
+    S6 -.-&gt; P6
+    S6 == snapshot ==&gt; P5
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<pre><code class="language-text">bc_best = P10 · candidate = P5 · fin = P5
+</code></pre>
+<h3 id="after-the-candidate-is-older-not-conflicting"><a class="header" href="#after-the-candidate-is-older-not-conflicting">After: the candidate is older, not conflicting</a></h3>
+<p>The higher-work Q branch replaces only <code>P8</code>–<code>P10</code>, so <code>bc_best_tip = Q10</code> still contains <code>fin = P5</code>. Its older BFT context yields candidate <code>P4</code>. Hold <code>fin</code> at <code>P5</code>.</p>
+<pre class="mermaid">graph TD
+    subgraph powChain [&quot;PoW&quot;]
+        Q10([&quot;Q10 · bc_best_tip&quot;]):::pow
+        Q9([Q9]):::pow
+        Q8([Q8]):::pow
+        P10([P10]):::powAlt
+        P9([P9]):::powAlt
+        P8([P8]):::powAlt
+        P7([P7]):::pow
+        P6([P6]):::pow
+        P5([&quot;P5 · fin&quot;]):::pow
+        P4([&quot;P4 · candidate&quot;]):::candidate
+        P3([P3]):::pow
+        P2([P2]):::pow
+        P1([P1]):::pow
+    end
+
+    subgraph bftChain [&quot;PoS&quot;]
+        S6(S6):::bft
+        S5(&quot;S5&lt;br/&gt;headers_bc = [P5, P6, P7]&quot;):::bft
+        S4(S4):::bft
+        S3(S3):::bft
+        S2(S2):::bft
+    end
+
+    %% Parent links
+    Q10 --&gt; Q9 --&gt; Q8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3 --&gt; P2 --&gt; P1
+    P10 --&gt; P9 --&gt; P8 --&gt; P7
+    S6 --&gt; S5 --&gt; S4 --&gt; S3 --&gt; S2
+
+    %% Crosslinks
+    Q10 -- context_bft --&gt; S5
+    S5 -.-&gt; P7
+    S5 -.-&gt; P6
+    S5 -.-&gt; P5
+    S5 == snapshot ==&gt; P4
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<pre><code class="language-text">bc_best = Q10 · candidate = P4 · fin = P5 · fin ⪯ Q10
+</code></pre>
+<p><strong>Why this is benign:</strong> <code>S5</code> carries <code>[P5, P6, P7]</code>, so <code>snapshot(S5) = P4</code>. Its child <code>S6</code> carries <code>[P6, P7, P8]</code>, so <code>snapshot(S6) = P5</code>. The snapshots are linear, and both the old P chain and the new Q chain contain <code>fin = P5</code>. Only the derived candidate moved backward.</p>
+<h3 id="what-the-node-does-on-each-best-chain-update"><a class="header" href="#what-the-node-does-on-each-best-chain-update">What the node does on each best-chain update</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Situation</th><th>Action</th></tr></thead><tbody>
+<tr><td><code>candidate(bc_best_tip)</code> descends from <code>fin</code></td><td>Advance <code>fin</code> to the candidate.</td></tr>
+<tr><td>The candidate is an ancestor of <code>fin</code></td><td>Hold <code>fin</code>. This can be benign, when the complete <code>bc_best</code> still contains <code>fin</code>.</td></tr>
+<tr><td>The candidate conflicts with <code>fin</code></td><td>Hold <code>fin</code> and record a finalization safety hazard.</td></tr>
+<tr><td><code>bc_best_tip</code> itself conflicts with <code>fin</code></td><td>Hold <code>fin</code>. The candidate test may only report "ancestor", so detect this separately.</td></tr>
+</tbody></table>
+</div>
+<p><strong>Do not conflate two tests.</strong> <code>fin ⪯ candidate(bc_best_tip)</code> can fail merely because the candidate lands behind <code>fin</code>; that does not mean the best chain has rolled back a finalized block. A full-best-chain conflict means that <code>fin</code> and <code>bc_best_tip</code> are on different forks. The candidate test alone does not detect it: the candidate of a conflicting tip can still be an ancestor of <code>fin</code>, as the next section shows.</p>
+<h2 id="exceptional-case-the-best-chain-forks-below-fin"><a class="header" href="#exceptional-case-the-best-chain-forks-below-fin">Exceptional case: the best chain forks below <code>fin</code></a></h2>
+<p>This is not the benign case above. Because <code>fin</code> came from a previously <code>sigma</code>-confirmed prefix, a later <code>bc_best</code> that conflicts with it means that this execution does not satisfy PoW Prefix Consistency at that confirmation depth.</p>
+<p><strong>Prefix Consistency failure at <code>sigma</code>: <code>fin = P5</code> conflicts with raw <code>bc_best = C8</code>.</strong></p>
+<pre class="mermaid">graph TD
+    subgraph bftChain [&quot;PoS / BFT&quot;]
+        S6(&quot;S6 proposal&quot;):::rejected
+        S5(S5):::bft
+        S4(&quot;S4&lt;br/&gt;headers_bc = [P6, P7, P8]&quot;):::bft
+        S3(S3):::bft
+        S2(S2):::bft
+    end
+
+    subgraph powChain [&quot;PoW / raw bc_best&quot;]
+        C8([&quot;C8 · raw bc_best_tip&quot;]):::pow
+        C7([C7]):::pow
+        C6([C6]):::pow
+        C5([C5]):::pow
+        C4([C4]):::pow
+        P8([P8]):::powAlt
+        P7([P7]):::powAlt
+        P6([P6]):::powAlt
+        P5([&quot;P5 · fin&quot;]):::powAlt
+        P4([P4]):::powAlt
+        P3([&quot;P3 · candidate(C8)&quot;]):::candidate
+        P2([P2]):::pow
+        P1([P1]):::pow
+    end
+
+    %% Parent links
+    C8 --&gt; C7 --&gt; C6 --&gt; C5 --&gt; C4 --&gt; P3 --&gt; P2 --&gt; P1
+    P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3
+    S6 --&gt; S5 --&gt; S4 --&gt; S3 --&gt; S2
+
+    %% Crosslinks
+    C8 -- context_bft --&gt; S3
+    S4 == snapshot ==&gt; P5
+    S6 == &quot;rejected snapshot&quot; ==x C6
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<p>The higher-work C chain forks from <code>P3</code>, below finalized <code>P5</code>. <code>C8</code> cites the older BFT block <code>S3</code>, and that context gives <code>candidate(C8) = P3</code>. The arrows for <code>S4</code>'s three headers are left out to keep the picture readable; they would point at <code>P6</code>, <code>P7</code> and <code>P8</code>.</p>
+<ol>
+<li><strong>Prefix Consistency at <code>sigma</code> failed.</strong> A previously <code>sigma</code>-confirmed prefix was displaced.</li>
+<li><strong>CL2 keeps <code>C8</code> as <code>bc_best</code>.</strong> The highest-score valid chain wins. No CL2 rule requires raw <code>bc_best</code> to contain <code>fin</code>.</li>
+<li><strong>Abstract CL2 rejects the crossing.</strong> Linearity keeps valid snapshots on the P branch, so a proposal <code>S6</code> whose snapshot is on the C fork is rejected.</li>
+<li><strong><code>candidate(C8) = P3</code>; <code>fin</code> stays <code>P5</code>.</strong> No C block can advance this finalization point. With no Stalled Mode, C blocks still carry ordinary spends.</li>
+</ol>
+<p><strong>Result:</strong> miners extend an unfinalizable best chain with ordinary spends, and the finality gap grows without bound. Raw fork choice may return to P; intervention is needed only if C stays dominant and finality must resume elsewhere.</p>
+<p><strong>The diagram shows the abstract CL2 path, not current Zebra.</strong> It assumes BFT Final Agreement and objective enforcement of the Linearity and Tail Confirmation validity rules. With those, the BFT snapshot history cannot cross to C, so <code>fin</code> remains <code>P5</code> while C is dominant. Zebra enforces both rules in BFT validation, so there this outcome rests on BFT Final Agreement alone. But Zebra does not follow raw <code>bc_best</code> onto C in the first place:</p>
+<ul>
+<li><strong>Abstract CL2 response.</strong> Keep raw <code>bc_best = C8</code>, keep <code>fin = P5</code>, and prevent valid BFT snapshots from crossing forks. With Stalled Mode omitted, nothing restricts later C blocks: spends accumulate past <code>fin</code> for as long as C dominates, and would be rolled back if the best chain returns to P.</li>
+<li><strong>Zebra Crosslink response.</strong> Sticky fork choice, described next. The node commits up to <code>fin</code>, which discards every chain that does not contain it, and rejects blocks that fork below its finalized tip. <code>C8</code> never becomes its best chain, whatever C's work; the node stays on P and keeps <code>fin = P5</code>. This enforces <code>fin ⪯ bc_best</code>, not the stronger property that an unfinalized <code>sigma</code>-deep prefix can never be displaced. Raw CL2 does not impose this rule; it is a Zebra Crosslink decision.</li>
+</ul>
+<h2 id="sticky-fork-choice"><a class="header" href="#sticky-fork-choice">Sticky fork choice</a></h2>
+<p>Sticky fork choice selects <code>bc_best</code> so that the node's own <code>fin</code> stays on its best chain. It is temporal: the result depends on the chain the node is already on and on its current <code>fin</code>, not only on the chains in view.</p>
+<pre class="mermaid">graph TD
+    Q9([&quot;Q9 · switch&quot;]):::pow
+    Q8([Q8]):::pow
+    Q7([Q7]):::pow
+    P8([&quot;P8 · bc_best_tip&quot;]):::pow
+    P7([P7]):::pow
+    P6([P6]):::pow
+    P5([&quot;P5 · fin&quot;]):::pow
+    P4([P4]):::pow
+    P3([P3]):::pow
+    P2([P2]):::pow
+    P1([P1]):::pow
+    C9([&quot;C9 · no switch&quot;]):::powAlt
+    C8([C8]):::powAlt
+    C7([C7]):::powAlt
+    C6([C6]):::powAlt
+    C5([C5]):::powAlt
+    C4([C4]):::powAlt
+
+    %% Parent links
+    Q9 --&gt; Q8 --&gt; Q7 -- &quot;forks above fin&quot; --&gt; P6
+    P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3 --&gt; P2 --&gt; P1
+    C9 --&gt; C8 --&gt; C7 --&gt; C6 --&gt; C5 --&gt; C4 -- &quot;forks below fin&quot; --&gt; P3
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<p>The node's current chain ends at <code>P8</code>, and <code>fin = P5</code>. It switches from its current chain to a new one if and only if:</p>
+<pre><code class="language-text">fin ⪯ new  and  (work(new) &gt; work(current)  or  equal work and greater tip hash)
+</code></pre>
+<ul>
+<li><strong><code>Q9</code>: more work, contains <code>fin = P5</code>.</strong> Switch. Raw work-based fork choice does the same.</li>
+<li><strong><code>C9</code>: more work, forks at <code>P3</code>, below <code>fin</code>.</strong> No switch, whatever C's work. Raw fork choice switches and leaves <code>fin</code> off <code>bc_best</code>.</li>
+<li><strong><code>fin</code> advances only to <code>candidate(bc_best)</code>.</strong> <code>candidate(bc_best) ⪯ bc_best</code>, so the node's best chain always contains its <code>fin</code>.</li>
+</ul>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p><code>bc_best</code> is raw fork choice, <code>candidate(H)</code> is objective evidence, and <code>fin</code> is node-local monotone memory. An application either stops with <code>fin</code> during a finalization stall, or follows <code>bc_best</code> with no bound on how far it runs past <code>fin</code>. Sticky fork choice, the rule Zebra Crosslink implements, selects <code>bc_best</code> only among chains containing <code>fin</code>, ordered by work and then tip hash.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guides/tfl-lexicon.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../old-design/adrs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guides/tfl-lexicon.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../old-design/adrs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
+
+
+    </div>
+    </body>
+</html>

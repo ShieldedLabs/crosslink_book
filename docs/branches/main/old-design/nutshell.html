@@ -1,0 +1,335 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>nutshell.md - Zcash Crosslink: A Visual Tour</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../guides/finality-and-fork-choice.html"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old-design/adrs.html"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="../old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="../old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="../old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="../old-design/nutshell.html" class="active"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="../old-design/scoping.html"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="../old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="../old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="../old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="crosslink-design-in-a-nutshell"><a class="header" href="#crosslink-design-in-a-nutshell">Crosslink Design in a Nutshell</a></h1>
+<p>This chapter covers the major components of the design. This presents the design positively, without rationales, trade-offs, safety anlyses, or other supporting information. This will eventually be entirely redundant with, or simply link to, a canonical <a href="https://zips.z.cash">Zcash Improvement Proposal</a> submission. Treat this chapter as a provisional sketch.</p>
+<p>It assumes and leverages familiarity with Zcash PoW and only describes new differences from today's mainnet.</p>
+<p><strong>CAVEATS:</strong> A lot of the terminology and descriptions will be adjusted as we go to follow conventions and specifications in the <a href="https://zips.z.cash/protocol/protocol.pdf">Zcash Protocol Specification</a> and the <a href="https://zips.z.cash">Zcash Improvement Proposals</a>.</p>
+<h2 id="roles-and-capabilities"><a class="header" href="#roles-and-capabilities">Roles and Capabilities</a></h2>
+<p>We rely on several roles described in <a href="five-component-model.html">the Five Component Model</a> in this nutshell section along with their intended capabilities. The absence of an explicit capability description for a role implies that role should not be able to perform that capability</p>
+<h2 id="changes-to-transactions"><a class="header" href="#changes-to-transactions">Changes to Transactions</a></h2>
+<h3 id="changes-to-the-coinbase-transaction"><a class="header" href="#changes-to-the-coinbase-transaction">Changes to the Coinbase Transaction</a></h3>
+<p>The <em>coinbase transaction</em> is an exceptional transaction Zcash inherited from Bitcoin which follows exceptional rules, including the distribution of newly issued tokens. This transaction is created by a block's miner.</p>
+<p>The consensus rules are updated to require this transaction to make transfers of a portion of newly issued ZEC dedicated to Crosslink rewards <em>only when</em> this block updates finality to a greater height, and then as the sum of all <em>pending finalization rewards</em> since the previous finalization.</p>
+<p>For each block produced which does not update finality, the per-block Crosslink rewards are collected into a running total, and a block which updates finality must then distributed this entire pending amount to the stakers and finalizers determined from the active set used to produce the finality update.</p>
+<p>The <em>pending finalizaiton rewards</em>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span>, in a block which updates finality must be distributed by the coinbase transaction to finalizers and stakers proportionally to their <em>reward slice</em>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">an</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span>, where the <em>active set</em> (defined <a href="#the-roster">below</a>) refers to the state as of the most recent final block, prior to this update.</p>
+<p>This is calculated as follows where we let <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">p</span><span class="mord mathnormal mtight">an</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span> be the total stake weight for that participant:</p>
+<ul>
+<li>
+<p>For finalizers in the <em>active set</em>: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">ina</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">zer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">COMM</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.05764em;">SS</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05764em;">TE</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.4365em;vertical-align:-0.4451em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9914em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2963em;"><span style="top:-2.357em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.5131em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3488em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight">ina</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">zer</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2901em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>The constant <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">COMM</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.05764em;">SS</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05764em;">TE</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.1</span></span></span></span> is a fixed protocol parameter called the <em>commission fee rate</em>.</p>
+</li>
+<li>
+<p>For all stakers: <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">ak</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">er</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1.0</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.3393em;vertical-align:-0.4451em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">COMM</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.05764em;">SS</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05764em;">TE</span><span class="mclose">)</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8942em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2963em;"><span style="top:-2.357em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4159em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3488em;margin-left:-0.1389em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">ak</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">er</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1512em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>The constant <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1.0</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">COMM</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.05764em;">SS</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05764em;">TE</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.9</span></span></span></span> is called the <em>staker reward rate</em>.</p>
+<p>Note that <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight" style="margin-right:0.03148em;">ak</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">er</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> is the total weight of all staking positions of the given staker <em>regardless</em> of whether or not it is assigned to an finalizer in the <em>active set</em>.</p>
+</li>
+</ul>
+<p>Another nuance: the sum of all commission fees and staker rewards adds up to <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">o</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span> <em>or less</em>, with the difference coming from stake assigned to finalizers outside the active set.</p>
+<h3 id="new-transaction-format--staking-actions"><a class="header" href="#new-transaction-format--staking-actions">New Transaction Format &amp; Staking Actions</a></h3>
+<p>A new transaction format is introduced which contains a new optional field for <em>staking actions</em>, which enable operations such as staking <code>ZEC</code> to a finalizer, beginning or completing an <em>unstaking</em> action, or <em>redelegating</em> an existing staking position to a different delegator.</p>
+<p>The <code>ZEC</code> flowing into staking actions, or flowing out of completing unstaking transactions must balance as part of the transactions chain value pool balancing. See <a href="https://zips.z.cash/protocol/protocol.pdf">The Zcash Protocol §4.17 Chain Value Pool Balances</a>.</p>
+<p>Additionally, we introduce a new restricting consensus rule on context-free transaction validity<sup class="footnote-reference"><a href="#ctx-free-validity">1</a></sup>:</p>
+<div class="footnote-definition" id="ctx-free-validity"><sup class="footnote-definition-label">1</sup>
+<p>A context-free transaction validity check may be performed on the bytes of the transaction itself without the need to access any chain state or index.</p>
+</div>
+<blockquote>
+<p><strong>Crosslink Staking Orchard Restriction:</strong></p>
+<p>A transaction which contains any <em>staking actions</em> must not contain any other fields contributing to or withdrawing from the Chain Value Pool Balances <em>except</em> Orchard actions, explicit transaction fees, and/or explicit ZEC burning fields.</p>
+</blockquote>
+<p>Abstractly, the staking actions include:</p>
+<ul>
+<li>_stake - This creates a new <em>staking position</em> assigning a transparent ZEC amount, which must be a power of 10, to a finalizer and including a cryptographic signature verification key intended for only the signing-key holder of the position to redelegate or unstake.</li>
+<li><em>redelegate</em> - This identifies a specific staking position, a new finalizer to reassign to, and a signature valid with the position's published verification key to authorize the transition.</li>
+<li><em>unbond</em> - This initiates an "unbonding process" which puts the staking position into an <em>unbonding state</em> and includes the ZEC amount, the current block height, and the signature verification key to authorize a later claim. Once in this state, redelegations are not valid and the ZEC amount does not contribute to staking weight for finalizers or the staker.</li>
+<li><em>claim</em> - This action removes a position in the <em>unbonding state</em> and contributes the bonded ZEC into the transaction's Chain Value Pool Balance, where because of the "Crosslink Staking Orchard Restriction, it may only be distributed into an Orchard destination and/or transaction fees.</li>
+</ul>
+<h4 id="further-restrictions-on-staking-actions"><a class="header" href="#further-restrictions-on-staking-actions">Further Restrictions on Staking Actions</a></h4>
+<p>We furthermore introduce the following consensus rule restrictions on transactions involving staking actions which rely on a <em>staking epoch</em> design:</p>
+<blockquote>
+<p><strong>Staking Epoch Definition:</strong></p>
+<p>Once Crosslink activates at block height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9334em;vertical-align:-0.2501em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0813em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">cross</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="mord mathnormal mtight">in</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.0315em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">a</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span></span></span></span>, <em>staking epochs</em> begin, which are continguous spans of block heights with two phases: <em>staking day</em> and the <em>locked phase</em>. The number of blocks for <em>staking day</em> is a protocol parameter constant roughly equivalent to 24 hours given assumptions about the Difficulty Adjustment Algorithm. The number of blocks for the <em>locked phase</em> is also a constant roughly equivalent to 6*24 hour periods, so that <em>staking day</em> is approximately one day per week.</p>
+</blockquote>
+<p>Given the staking epoch definition, we introduce the following restrictions in the consensus rules:</p>
+<blockquote>
+<p><strong>Locked Staking Actions Restriction:</strong></p>
+<p>If a transaction includes any staking actions <em>except for</em> redelegate, and that transaction is in a block height in a <em>locked phase</em> of the <em>staking epoch</em>, then that block is invalid.</p>
+</blockquote>
+<p>Also:</p>
+<blockquote>
+<p><strong>Unbonding Delay:</strong></p>
+<p>If a transaction is block height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> includes any <em>claim</em> staking actions which refer to <em>unbonding state</em> positions which have not existed in the unbonding state for at least one full staking epoch, that block is invalid.</p>
+</blockquote>
+<p>Note: An implication of the Unbonding Delay is that the same staking day cannot include both an <em>unbond</em> and <em>claim</em> for the same position.</p>
+<p>A final restriction (already mentioned above in introducing the <em>staking</em> action is:</p>
+<blockquote>
+<p><strong>Stake Action Amount Quantization:</strong></p>
+<p>If a transaction includes any staking actions with an amount which is not a power of 10 ZEC (or ZAT), that transaction is invalid.</p>
+</blockquote>
+<h2 id="changes-to-ledger-state"><a class="header" href="#changes-to-ledger-state">Changes to Ledger State</a></h2>
+<p>The <em>Ledger State</em> is a conceptual and practical data structure which can be computed by fully verifying nodes solely from the sequence of blocks starting from the genesis block.<sup class="footnote-reference"><a href="#lazy-ledger-state">2</a></sup> To this Ledger State, Crosslink introduces the <em>roster</em> which is a table containing all of the information about all ZEC staked to <em>finalizers</em>.</p>
+<div class="footnote-definition" id="lazy-ledger-state"><sup class="footnote-definition-label">2</sup>
+<p>Theoretically all of the Ledger State could be purely computed on demand from prior blocks, so literal Ledger State representations in memory can be thought of as chain indices or optimizing caches for verifying consensus rules. In some cases components of the Ledger State must be committed to within the blockchain state itself (for example, commitment anchors) which constrains how lazy a theoretical implementation can be. Real implementations trade off caching vs lazy-computation in a fine-grained way to achieve practical goals.</p>
+</div>
+<h3 id="the-roster"><a class="header" href="#the-roster">The Roster</a></h3>
+<p>Crosslink's addition to Ledger State is embodied in the <em>PoS roster</em>, aka the <em>roster</em> for short. Which tracks <em>staking positions</em> created by Stakers, and attached to specific Finalizers. A Finalizer has a "voting weight" equal to the sum of all staking positions attached to it (see below in <a href="#FIXME">FIXME</a>).</p>
+<p>Each <em>staking position</em> is composed of at least a single specific target <em>finalizer verification key</em>, a <em>staked ZEC amount</em>, and a <em>unstaking/redelegation verification key</em>. The <em>finalizer verification key</em> designates a cryptographic signature verification key which serves as the sole on-chain reference to a specific <em>finalizer</em><sup class="footnote-reference"><a href="#multi-key-finalizers">3</a></sup>. People may mean a specific person, organization, entity, computer server, etc... when they say "finalizer", but for the rest of this document we will use the term <em>finalizer</em> as a shorthand for "whichever entity controls the verification key for a given <em>finalizer verification key</em>.</p>
+<div class="footnote-definition" id="multi-key-finalizers"><sup class="footnote-definition-label">3</sup>
+<p>Any particular entity may produce any number of <em>finalizer verifying keys</em> of course, although for economic or social reasons, we expect many finalizers to be motivated to hang their reputation on 1 or just a few well-known finalizer verifying keys.</p>
+</div>
+<p>The <em>unstaking/redelegation verifying key</em> enables unstaking or redelegating that position from the participant that created that position (or more precisely anyone who controls the associated verifying key, which should be managed by a good wallet on behalf of users without their need to directly know or care about these keys for safe operation). These are unique to the position itself (and not linked on-chain to a user's other potential staking positions or other activity).</p>
+<p>The sum of outstanding staking positions designating a specific finalizer verification key at a given block height is called the <em>stake weight</em> of that finalizer. At a given block height the top <code>K</code> (currently 100) finalizers by stake weight are called the <em>active set</em> of finalizers.</p>
+<h3 id="ledger-state-invariants"><a class="header" href="#ledger-state-invariants">Ledger State Invariants</a></h3>
+<p>We adopt a design invariant around the Ledger State changes Crosslink makes against mainnet Zcash:</p>
+<blockquote>
+<p><strong>General Ledger State Design Invariant:</strong></p>
+<p>All changes to Ledger State can be computed <em>entirely</em> from (PoW) blocks, transactions, and data transitively referred to by such. This includes all existing Ledger State in mainnet Zcash today, the PoS and BFT roster state (see below), and the <em>finality status</em> of blocks and transactions.</p>
+</blockquote>
+<p>All current mainnet Zcash Ledger State and almost all Crosslink Ledger State is <em>height-immediate Ledger State</em>: the value for height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> can be computed from height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> itself (and implicitly all prior heights and contents). Some examples of height-immediate values are the total ZEC issued, the UTXOs spendable by the same P2PKH t-addr, the block's zero-knowledge commitment anchor values, and so on. In Crosslink examples include all of the roster state (e.g. the active set, finalizer verification keys, staking positions, ...).</p>
+<h4 id="height-eventual-ledger-state"><a class="header" href="#height-eventual-ledger-state">Height-Eventual Ledger State</a></h4>
+<p>Crosslink introduces a novel category of Ledger State not present in Zcash mainnet, which is <em>height-eventual Ledger State</em>. This is a property or value about height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> which is only computable at a later larger height (of which the implicit block at <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> must be an ancestor). The sole example of this is <em>finality status</em>.</p>
+<p>The <em>finality status</em> of a block at height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> (and by extension any transactions it contains and all previous block contents) is a property which guarantees[^guarantees] to the verifying node that this block (and all txns and previous content) is <em>final</em> and cannot be reverted or rolled back. Furthermore, the presence of this property also provides a guarantee that a majority of finalizers already agree on the finality status of this block and also that <em>all verifying nodes</em> which see a sufficient number of subsequent blocks will also agree on the finality status.</p>
+<p>[^guarantees] In this book, whenever we say a protocol "guarantees" some condition, we mean that <em>so long as the security assumptions truly hold</em> verifying nodes can and should safely rely on that condition.</p>
+<p>The <em>finality status</em> of a block at height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> (which we'll call a <em>finality-candidate block</em> here for precision) is computable from a block at a later height <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span> (which we'll call the <em>attesting block</em>). All verifying nodes who have observed the <em>that</em> attesting block will agree on the finality of the candidate block <em>even though</em> they may observe the attesting block rollback. In the event of such a rollback, the protocol guarantees that an alternative block will eventually attest to the finality status of the same candidate block.</p>
+<h3 id="finality-transaction-semantics-ledger-state-and-the-roster"><a class="header" href="#finality-transaction-semantics-ledger-state-and-the-roster">Finality, Transaction Semantics, Ledger State, and the Roster</a></h3>
+<p>It bears pointing out a nuance: the Ledger State, including the Roster and the Active Set are all determined by valid transactions within PoW blocks. Every PoW block height thus has a specific unambiguous Ledger State. This comes into play later when we consider <em>finality</em> which is a property of a given block height which is only verifiable at a later block height.</p>
+<h2 id="the-bft-sub-protocol"><a class="header" href="#the-bft-sub-protocol">The BFT Sub-Protocol</a></h2>
+<p><strong>TODO:</strong> Flesh out this section</p>
+<h1 id="todos-from-deep-dive"><a class="header" href="#todos-from-deep-dive">TODOS from deep dive:</a></h1>
+<ul>
+<li>rewards distribution to stakers and finalizers requires changes to the Coinbase transaction.</li>
+<li>how finality status is calculated</li>
+<li>how BFT operates, votes, network, etc...</li>
+<li>active set selection</li>
+<li>quantization of amounts / time</li>
+<li>the power of 10 restriction on amount is only applied to "stake" (create position)</li>
+<li>how do staking actions pay fees?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../old-design/five-component-model.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../old-design/scoping.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../old-design/five-component-model.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../old-design/scoping.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
+
+
+    </div>
+    </body>
+</html>

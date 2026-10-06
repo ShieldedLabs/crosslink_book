@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html" class="active"><strong aria-hidden="true">5.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../guides/finality-and-fork-choice.html"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old-design/adrs.html"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="../old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="../old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="../old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="../old-design/nutshell.html"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="../old-design/scoping.html"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="../old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="../old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="../old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html" class="active"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -199,6 +199,39 @@ classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
     %% Define alternative PoW block style with orange fill for caution
     classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
 </pre>
+<h2 id="crosslink-finality-styles"><a class="header" href="#crosslink-finality-styles">Crosslink Finality Styles</a></h2>
+<p>For diagrams that show both chains and the finality markers, as in <a href="../guides/finality-and-fork-choice.html">A Visual Guide to Finality and Fork Choice</a>. Use <code>pow</code> for PoW blocks on the node's best chain and <code>powAlt</code> for PoW blocks off it.</p>
+<pre><code class="language-text">%% Define PoS / BFT block style with dark red border
+classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+%% Define style for the BFT block that a PoW block's context_bft makes final, LF(H)
+classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+%% Define style for a BFT proposal that the validity rules reject
+classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+%% Define style for the PoW block that is candidate(H), with yellow fill
+classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+%% Define fin last, so that its border wins over the block style.
+classDef fin stroke:#8e24aa,stroke-width:7px
+</code></pre>
+<p><code>fin</code> only sets a border, so add it on top of a block's own style with a <code>class</code> statement, such as <code>class P5 fin</code>. Both styles then set a border, and Mermaid lets the one defined later win, so <code>classDef fin</code> must come after the others.</p>
+<h3 id="usage-example-1"><a class="header" href="#usage-example-1">Usage Example</a></h3>
+<pre class="mermaid">graph TD
+    A([pow]):::pow --&gt; B([candidate]):::candidate
+    B --&gt; C([&quot;candidate + fin&quot;]):::candidate
+    C --&gt; D([&quot;pow + fin&quot;]):::pow
+    E([&quot;powAlt + fin&quot;]):::powAlt --&gt; D
+    X(rejected):::rejected --&gt; Y(lf):::lf
+    Y --&gt; Z(bft):::bft
+    class C,D,E fin
+
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+</pre>
 <h2 id="node-type-styles"><a class="header" href="#node-type-styles">Node Type Styles</a></h2>
 <p>Standard node types used across diagrams:</p>
 <pre><code class="language-text">classDef input fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
@@ -212,7 +245,7 @@ classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../guides/tfl-lexicon.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../old-design/userled-emergency-hardforks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -223,7 +256,7 @@ classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../guides/tfl-lexicon.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../old-design/userled-emergency-hardforks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 

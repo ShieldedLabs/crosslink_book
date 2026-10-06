@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>scoping.md - Zcash Crosslink: A Visual Tour</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../guides/finality-and-fork-choice.html"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old-design/adrs.html"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="../old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="../old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="../old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="../old-design/nutshell.html"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="../old-design/scoping.html" class="active"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="../old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="../old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="../old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="scope-for-crosslink"><a class="header" href="#scope-for-crosslink">Scope for Crosslink</a></h1>
+<h1 id="what-are-our-goals-for-the-first-deployment-of-crosslink"><a class="header" href="#what-are-our-goals-for-the-first-deployment-of-crosslink">What are our goals for the first deployment of Crosslink?</a></h1>
+<h1 id="rationale"><a class="header" href="#rationale">Rationale</a></h1>
+<h2 id="why-add-a-proof-of-stake-finality-gadget"><a class="header" href="#why-add-a-proof-of-stake-finality-gadget">Why add a Proof-of-Stake finality gadget?</a></h2>
+<ul>
+<li>The Proof-of-Stake finality gadget adds <a href="./terminology.html#crosslink_finality"><em>crosslink finality</em></a>, which protects users from being robbed, improves the safety and efficiency of bridges, and enables centralized exchanges, decentralized exchanges, and other services to reduce and unify <a href="https://zechub.wiki/using-zcash/custodial-exchanges">deposit times</a>.</li>
+<li>Proof-of-Stake provides a different and complementary kind of security that pure Proof-of-Work doesn't, by allowing the value at stake (which inventivizes defenders to protect users) to be cumulative instead of transient. This makes Zcash more secure—it provides better security for the same security budget. It also makes Zcash more sustainable—it provides long-term security even as the rate of issuance shrinks, which strengthens assurance that the 21M supply cap will be maintained.</li>
+<li>Proof-of-Stake replaces some of the sell pressure from miners with buy pressure from finalizers. This is good because the price of ZEC is the fuel for the mission and attracts users.</li>
+<li>Proof-of-Stake allows a larger number of users to participate actively in the network than mining does, and to become direct recipients of ZEC issued by the blockchain. This increases the size and diversity of the set of users and stakeholders <sup class="footnote-reference"><a href="#economies_of_scale">1</a></sup>.</li>
+</ul>
+<div class="footnote-definition" id="economies_of_scale"><sup class="footnote-definition-label">1</sup>
+<p>In Proof-of-Work, smaller miners have a substantial economic disadvantage compared to larger mining operations, resulting in almost all hashpower being controlled by a few large miners. This economic disadvantage is reduced in Proof-of-Stake finalization—smaller finalizers have less of an economic disadvantage compared to larger finalizers. The economic disadvantage is almost eliminated in Proof-of-Stake delegation—smaller delegators compete on a level playing field with larger delegators, earning roughly the same reward with roughly the same risk.</p>
+</div>
+<h2 id="why-keep-the-proof-of-work-blockchain"><a class="header" href="#why-keep-the-proof-of-work-blockchain">Why Keep the Proof-of-Work blockchain?</a></h2>
+<ul>
+<li>Proof-of-Work provides a different and complementary kind of security that pure Proof-of-Stake doesn’t, by requiring a recurring, non-reusable, and non-recoverable expenditure (by defenders and potential attackers). This prevents attackers from re-using resources in attacks (whether simultaneous or successive attacks). Crosslink security is therefore more robust and self-healing against large-scale attacks than pure Proof-of-Stake security.</li>
+<li>Proof-of-Work provides excellent liveness, availability, and censorship-resistance (which complements the censorship-resistance provided by using end-to-end-encryption whenever possible).</li>
+<li>Proof-of-Work allows people to earn ZEC by mining, even if they don’t already own any ZEC and they can’t acquire ZEC any other way.</li>
+<li>Keeping Proof-of-Work in addition to adding Proof-of-Stake means that in addition to adding the stakers, we also keep miners as active participants in the network and recipients of ZEC, increasing the size and diversity of the Zcash network and the ZEC economy.</li>
+</ul>
+<h2 id="ux-goals"><a class="header" href="#ux-goals">UX goals</a></h2>
+<p>This list of <a href="https://github.com/ShieldedLabs/zebra-crosslink/labels/UX%20Goal">UX Goals</a> is tracked on GitHub.</p>
+<ul>
+<li>CEXes (<a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/131">GH #131</a>) and decentralized services like DEXes/bridges (<a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/128">GH #128</a>) are willing to rely on Zcash transaction finality. E.g. Coinbase reduces its required confirmations to no longer than Crosslink finality. All or most services rely on the same canonical (protocol-provided) finality instead of enforcing <a href="https://zechub.wiki/using-zcash/custodial-exchanges">their own additional delays or conditions</a>, so users get predictable transaction finality across services.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/127">GH #127</a>: Casual users (who understand little about crypto and do not use specialized tools such as a Linux user interface) delegate ZEC and get rewards from their mobile wallet. <a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/124">GH #124</a> They have to learn a minimal set of new concepts in order to do this.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/158">GH #158</a>: Users can get compounding returns by leaving their stake plus their rewards staked, without them or their wallet having to take action.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/126">GH #126</a>: Skilled users (who understand more and can use specialized tools) run finalizers and get rewards.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/214">GH #214</a>: Skilled users can easily collect records of finalizer behavior and performaance.</li>
+</ul>
+<p><em>Shielded Labs’s First Deployment of Crosslink is not done until substantial numbers of real users are actually gaining the above benefits.</em></p>
+<h2 id="deployment-goals"><a class="header" href="#deployment-goals">Deployment Goals</a></h2>
+<p>This list of <a href="https://github.com/ShieldedLabs/zebra-crosslink/labels/Deployment%20Goals">Deployment Goals</a> is tracked on GitHub.</p>
+<ul>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/125">GH #125</a>: Zcash transactions come with a kind of finality which protects the users as much as possible against all possible attacks, and is sufficient for services such as cross-chain bridges and centralized exchanges.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/124">GH #124</a>: Users can delegate their ZEC and earn rewards, safely and while needing to learn only the minimal number of new concepts.
+<ul>
+<li>Delegating to a finalizer does not enable the finalizer to steal your funds.</li>
+<li>Delegating to a finalizer does not leak information that links the user's action to other information about them, such as their IP address, their other ZEC holdings that they are choosing not to stake, or their previous or future transactions.</li>
+</ul>
+</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/123">GH #123</a>: The time-to-market and the risk of Shielded Labs's First Deployment of Crosslink is minimized: the benefits listed above start accruing to users as soon as safely possible.</li>
+<li><a href="https://github.com/ShieldedLabs/zebra-crosslink/issues/122">GH #122</a>: Activating Crosslink on Zcash mainnet retains as much as possible of Zcash users' safety, security, privacy, and availability guarantees.</li>
+</ul>
+<h2 id="trade-offs"><a class="header" href="#trade-offs">Trade-offs</a></h2>
+<p>Goals which we currently believe are not safely achievable in this first deployment without losing some of the above goals:</p>
+<ul>
+<li>Improving Zcash's bandwidth (number of transactions per time) or latency (time for a transaction).</li>
+<li>Deploying cross-chain interoperation such as the Inter-Blockchain Communication protocol (IBC) or Cross-Chain Interoperability Protocol (CCIP).</li>
+<li>Supporting a large number of finalizers so that any user who wants to run their own finalizer can do so.</li>
+<li>Supporting casual users, with little computer expertise, running finalizers.</li>
+</ul>
+<h2 id="non-goals"><a class="header" href="#non-goals">Non-Goals</a></h2>
+<ul>
+<li>The consensus mechanism is needed primarily to prevent double-spending/multi-spending/rollback attacks. It is not the primary provider of censorship-resistance, since that is provided primarily by end-to-end encryption, and it is not the primary provider of counterfeiting-resistance, since that is provided by proofs and turnstiles. So censorship-resistance and counterfeiting-resistance are not primary goals for (at least) the first deployment of Crosslink.</li>
+<li>This is neutral with regard to Zcash governance —-- it doesn't change anything about Zcash governance.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../old-design/nutshell.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../old-design/security-properties.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../old-design/nutshell.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../old-design/security-properties.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
+
+
+    </div>
+    </body>
+</html>

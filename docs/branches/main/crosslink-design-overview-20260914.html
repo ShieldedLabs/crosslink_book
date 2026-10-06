@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="crosslink-design-overview-20260914.html" class="active"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="editing/mermaid-styles.html"><strong aria-hidden="true">5.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="crosslink-design-overview-20260914.html" class="active"><strong aria-hidden="true">3.2.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="guides/finality-and-fork-choice.html"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="old-design/adrs.html"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="old-design/nutshell.html"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="old-design/scoping.html"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="editing/mermaid-styles.html"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -362,6 +362,65 @@
 <p><code>fin</code> is never set from a BFT decision directly. On every change of best chain, the node computes</p>
 <p><code>candidate(best) = lca(snapshot(LF(best)), prune_σ(best))</code></p>
 <p>where <code>LF(best)</code> is the TFC the tip's <code>context_bft</code> points at, and <code>prune_σ(C)</code> is C with its last <code>σ</code> blocks removed. If <code>fin</code> is an ancestor of or equal to the candidate, <code>fin</code> := candidate. Otherwise <code>fin</code> stays put. So <code>fin</code> only advances along the node's own best chain, only to blocks the node has itself buried <code>σ</code> deep, and never backwards.</p>
+<p>The walk that computes the candidate, with <code>σ</code> = 4 and best tip <code>P10</code>. Newer blocks are at the top, and each arrow points from a block to something it names:</p>
+<pre class="mermaid">graph TD
+    subgraph bftChain [&quot;BFT chain&quot;]
+        T6(&quot;TFC 6 · LF(P10)&lt;br/&gt;headers_bc =&lt;br/&gt;[P6, P7, P8, P9]&quot;):::lf
+        T5(&quot;TFC 5&quot;):::bft
+        T4(&quot;TFC 4&quot;):::bft
+        T3(&quot;TFC 3&quot;):::bft
+        T2(&quot;TFC 2&quot;):::bft
+        T1(&quot;TFC 1&quot;):::bft
+    end
+
+    subgraph powChain [&quot;PoW best chain&quot;]
+        P10([&quot;P10 · best tip&quot;]):::pow
+        P9([P9]):::pow
+        P8([P8]):::pow
+        P7([P7]):::pow
+        P6([&quot;P6 · prune_σ(best)&quot;]):::pow
+        P5([&quot;P5 · candidate(best) · fin&quot;]):::candidate
+        P4([&quot;P4 · fin before this update&quot;]):::pow
+        P3([P3]):::pow
+    end
+
+    %% Parent links
+    P10 --&gt; P9 --&gt; P8 --&gt; P7 --&gt; P6 --&gt; P5 --&gt; P4 --&gt; P3
+    T6 --&gt; T5 --&gt; T4 --&gt; T3 --&gt; T2 --&gt; T1
+
+    %% Crosslinks
+    P10 -- context_bft --&gt; T6
+    T6 -.-&gt; P9
+    T6 -.-&gt; P8
+    T6 -.-&gt; P7
+    T6 -.-&gt; P6
+    T6 == snapshot ==&gt; P5
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef pow fill:#fff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+    class P5 fin
+</pre>
+<p><code>P10</code> cites TFC 6. Its dotted arrows are the <code>σ</code> headers it carries, and its snapshot is the parent of the deepest one: <code>P5</code>. <code>prune_σ(best)</code> is <code>P6</code>. So <code>candidate(best) = lca(P5, P6) = P5</code>. <code>fin</code> was <code>P4</code>, an ancestor of <code>P5</code>, so <code>fin</code> := <code>P5</code>.</p>
+<p>The update rule:</p>
+<pre class="mermaid">graph TD
+    decision([&quot;A BFT decision arrives&quot;]):::input --&gt; snap[&quot;bft_final_snapshot advances.&lt;br/&gt;fin does not move.&quot;]:::storage
+    change([&quot;The best chain changes&quot;]):::input --&gt; compute[&quot;candidate(best) =&lt;br/&gt;lca(snapshot(LF(best)), prune_σ(best))&quot;]:::compute
+    compute --&gt; test{&quot;Is fin the candidate&lt;br/&gt;or an ancestor of it?&quot;}:::compute
+    test -- yes --&gt; advance[&quot;fin := candidate&quot;]:::output
+    test -- no --&gt; hold[&quot;fin stays put&quot;]:::storage
+
+    %% Styles defined in mermaid-common-styles.js and mermaid-styles.md
+    classDef input fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
+    classDef compute fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef output fill:#e8f5e9,stroke:#1b5e20,stroke-width:3px,color:#000
+    classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px,color:#000
+</pre>
+<p><a href="./guides/finality-and-fork-choice.html">A Visual Guide to Finality and Fork Choice</a> draws the reorg cases.</p>
 <h3 id="the-ratchet-step-by-step"><a class="header" href="#the-ratchet-step-by-step">The ratchet, step by step</a></h3>
 <ul>
 <li>A decision arrives. It advances <code>bft_final_snapshot</code> (the snapshot of the newest decided TFC), which may be on a side chain. My <code>fin</code> does not move yet.</li>
