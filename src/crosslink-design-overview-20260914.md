@@ -6,6 +6,8 @@
 
 **Related:** *Nikete's Mechanism Design Audit of Crosslink Zebra* (recommended reading for Part IV).
 
+**How to read this document:** The main body text is specification. Supporting material is folded into collapsible sections tagged by category: **Rationale** (what motivates a design choice), **Implementation detail** (details of the current or possible implementations), and **Other details**.
+
 ## Terminology used in the working notes and adopted here
 
 - `TFC` — the BFT certificate ("trailing finality certificate").
@@ -46,9 +48,14 @@
 
 ## 1. PURPOSE
 
+Crosslink adds a proof-of-stake BFT (Byzantine fault tolerant) layer whose only job is to finalize the proof-of-work chain. It does not replace proof of work and it does not carry the ledger. It periodically reaches agreement that a specific PoW block is final.
+
+<details>
+<summary><strong>Rationale</strong>: the problem, and the five goals the design serves</summary>
+
 Zcash is a proof-of-work chain, and proof of work gives only probabilistic finality: reversing a block grows ever more expensive, but there is never a moment at which it is definitively settled. In practice the tip of the chain can thrash — small reorganisations near the head as competing blocks race.
 
-Crosslink adds a proof-of-stake BFT (Byzantine fault tolerant) layer whose only job is to finalize the proof-of-work chain. It does not replace proof of work and it does not carry the ledger. It periodically reaches agreement that a specific PoW block is final, and the rest of the design is arranged so that:
+The rest of the design is arranged so that:
 
 - this agreement has teeth (nodes will not reorg past it),
 - proof of work remains the primary system, so that if the BFT layer fails the network decays gracefully back to plain PoW,
@@ -58,11 +65,20 @@ Crosslink adds a proof-of-stake BFT (Byzantine fault tolerant) layer whose only 
 
 Most specific choices below are downstream of one of those five goals.
 
+</details>
+
 <a id="section-2"></a>
 
 ## 2. THE ONE-PARAGRAPH VERSION
 
-There are two chains. The PoW chain gets a new field, the "fat pointer", that names a BFT certificate by hash and carries signatures attesting to it. The BFT chain is a sequence of certificates, each of which finalizes one PoW block and carries a few PoW headers above it as evidence of work. Each chain therefore points at the other. Nodes follow the "sticky choice" rule: most-work still picks the best chain, but once a finalized block is on your best chain you never reorg past it, so finality is a ratchet rather than an override. BFT participants are "finalizers"; anyone can delegate stake to them by creating anonymous, fixed-denomination bonds from shielded funds. Rewards are paid uniformly and only while the system is working; there is no in-protocol slashing, because the protocol cannot agree on who voted for what. Instead, slashing is a user-coordinated hard fork that burns all stake delegated to a named finalizer and jails it. All ledger state lives on the PoW chain, and every economic effect is computed from what the PoW chain can see through the fat pointer.
+There are two chains. The PoW chain gets a new field, the "fat pointer", that names a BFT certificate by hash and carries signatures attesting to it. The BFT chain is a sequence of certificates, each of which finalizes one PoW block and carries a few PoW headers above it as evidence of work. Each chain therefore points at the other. Nodes follow the "sticky choice" rule: most-work still picks the best chain, but once a finalized block is on your best chain you never reorg past it, so finality is a ratchet rather than an override. BFT participants are "finalizers"; anyone can delegate stake to them by creating anonymous, fixed-denomination bonds from shielded funds. Rewards are paid uniformly and only while the system is working; there is no in-protocol slashing. Instead, slashing is a user-coordinated hard fork that burns all stake delegated to a named finalizer and jails it. All ledger state lives on the PoW chain, and every economic effect is computed from what the PoW chain can see through the fat pointer.
+
+<details>
+<summary><strong>Rationale</strong>: why there is no in-protocol slashing</summary>
+
+There is no in-protocol slashing because the protocol cannot agree on who voted for what.
+
+</details>
 
 <a id="part-ii"></a>
 
@@ -79,23 +95,55 @@ The PoW chain carries, per block, a "fat pointer" to the BFT chain:
 - a hash identifying a BFT certificate, and
 - a set of Ed25519 signatures attesting to that certificate.
 
-The certificate is referenced by hash rather than embedded by value. A certificate contains PoW headers, so embedding it in a PoW block would be recursive. Referring by hash breaks the recursion at the cost of the "not yet known" state discussed in section 5.
-
-The fat pointer exists because a certificate cannot carry its own signatures: the signatures are over the certificate, so they cannot be inside it. Several places for the signatures were considered; alongside the hash on the PoW side is the one settled on. Whether the signature set could be made fixed-size with a different scheme is an open question (Part VI).
+The certificate is referenced by hash rather than embedded by value.
 
 All ledger state — balances, bonds, rosters — lives on the PoW chain. The BFT chain finalizes and holds no state of its own. Every payout, burn or slash is computed from what the PoW chain can observe about the BFT chain, and the fat pointer is the only window.
 
+<details>
+<summary><strong>Rationale</strong>: why a hash, and why the signatures sit beside it</summary>
+
+A certificate contains PoW headers, so embedding it in a PoW block would be recursive. Referring by hash breaks the recursion at the cost of the "not yet known" state discussed in section 5.
+
+The fat pointer exists because a certificate cannot carry its own signatures: the signatures are over the certificate, so they cannot be inside it. Several places for the signatures were considered; alongside the hash on the PoW side is the one settled on.
+
+</details>
+
+<details>
+<summary><strong>Other details</strong>: fixed-size signature set</summary>
+
+Whether the signature set could be made fixed-size with a different scheme is an open question (Part VI).
+
+</details>
+
 ### Where in the PoW block it lives
 
-The current implementation modifies the block header directly and bumps the header version. (The version number is [TBC]; "version 5" was dictated but may be a confusion with transaction v5.) A ZIP call on 2025-08-05 with Jack "str4d" Grigg and Daira-Emma established that this is possible but "fractally difficult", and that the options below should be weighed first. Jack has offered to review early designs.
+Which storage option to adopt is not yet settled (Part VI).
 
-### Why changing the header is hard
+<details>
+<summary><strong>Implementation detail</strong>: the current approach</summary>
+
+The current implementation modifies the block header directly and bumps the header version. (The version number is [TBC]; "version 5" was dictated but may be a confusion with transaction v5.)
+
+</details>
+
+<details>
+<summary><strong>Other details</strong>: consultation with ZIP editors</summary>
+
+A ZIP call on 2025-08-05 with Jack "str4d" Grigg and Daira-Emma established that this is possible but "fractally difficult", and that the options below should be weighed first. Jack has offered to review early designs.
+
+</details>
+
+<details>
+<summary><strong>Rationale</strong>: why changing the header is hard</summary>
 
 - ASIC miners may have hardcoded header interpretation. Breaking most miners would structurally reduce PoW security.
 - The version field has been used inconsistently in the wild (e.g. big-endian 4 and other small numbers). If mining follows the Stratum protocol of ZIP 301, a strict version == 4 is already required and a plain bump would work; if not, the little-endian signed value must still be positive, so the top bit is available as a flag (the approach ZIP 202 uses for "overwintered"). [TODO: survey actual version-field use on chain.]
 - Exchanges and others may have custom parsers. SPV and lightwallet protocols are little used, and the mining-pool population is small enough to talk to individually, which may make this tractable.
 
-**Storage options, in increasing order of change required**
+</details>
+
+<details>
+<summary><strong>Implementation detail</strong>: storage options, in increasing order of change required</summary>
 
 - **a. Commit only.** Do not store Crosslink data; add it to the tree behind the existing 32-byte commitment field whose meaning is versioned. Probably insufficient, since some data must actually be stored.
 - **b. Coinbase sigscript.** ~100 bytes, and the cap is far easier to raise than the header. Fits a 32-byte hash of the certificate but not signatures. Compatible with designs that ignore signatures on the PoW side, at the cost that a new PoW block's link cannot be verified as carrying the required votes without consulting an up-to-date PoS service.
@@ -105,7 +153,14 @@ The current implementation modifies the block header directly and bumps the head
 
 A caveat for any option that keeps the data outside the header: PoS blocks cannot then use the PoW headers they carry to directly reach back-references to earlier PoS blocks.
 
-**Further reading:** ZIP 200 (network upgrade mechanism); zcash issues #172, #5755, #1040.
+</details>
+
+<details>
+<summary><strong>Other details</strong>: further reading</summary>
+
+ZIP 200 (network upgrade mechanism); zcash issues #172, #5755, #1040.
+
+</details>
 
 <a id="section-4"></a>
 
@@ -113,26 +168,58 @@ A caveat for any option that keeps the data outside the header: PoS blocks canno
 
 The unit of the BFT chain is a TFC. Each non-genesis TFC carries `headers_bc`: exactly `σ` PoW headers, deepest first. The block it finalizes (its "snapshot") is not among them. It is the parent of the first header, named by that header's parent hash. So the `σ` headers are the confirmations above the snapshot, and the snapshot is `σ`-confirmed by construction.
 
-`σ` is a protocol parameter. The prototype sets `σ` = 4. This value has not been checked for security or performance.
+`σ` is a protocol parameter.
+
+<details>
+<summary><strong>Implementation detail</strong>: the prototype's value of <code>σ</code></summary>
+
+The prototype sets `σ` = 4. This value has not been checked for security or performance.
+
+</details>
 
 ### Two TFC validity rules concern `headers_bc`:
 
 - **Tail Confirmation:** the headers are the `σ`-block tail of a bc-valid chain.
 - **Linearity:** each snapshot is equal to or descends from the parent TFC's snapshot. Final snapshots only move forward along one PoW chain.
 
-A validator must download and validate the PoW blocks under those headers, not just check the headers' work. Tail Confirmation requires a bc-valid chain, and a proposal whose snapshot the node cannot resolve cannot be validated yet. Headers alone do not establish validity. The trade-off is accepted: finalization waits on the validators receiving those blocks. Tail Confirmation is objective all the same: `σ` consecutive headers ending at a bc-valid block form that block's tail, whatever the validator's own best chain is.
+A validator must download and validate the PoW blocks under those headers, not just check the headers' work. Tail Confirmation requires a bc-valid chain, and a proposal whose snapshot the node cannot resolve cannot be validated yet.
+
+<details>
+<summary><strong>Rationale</strong>: why validators fetch the blocks, not just the headers</summary>
+
+Headers alone do not establish validity. The trade-off is accepted: finalization waits on the validators receiving those blocks. Tail Confirmation is objective all the same: `σ` consecutive headers ending at a bc-valid block form that block's tail, whatever the validator's own best chain is.
+
+</details>
 
 ### Inclusion Depth
 
-A PoW block at height P may cite (via `context_bft`) a TFC whose snapshot is at height F only if P >= F + `σ` + 1: the `σ` carried headers F+1 ..= F+`σ`, then the carrier. This is a bc-block validity rule, beside Valid Context, Extension and Last Final Snapshot. Checking it takes a PoW -> PoS -> PoW lookup: resolve the pointer to its TFC, take the TFC's snapshot, look up its height. A block whose snapshot is not yet known is deferred, not rejected. Block templates apply the same test, so a miner is never handed a TFC it could not include.
+A PoW block at height P may cite (via `context_bft`) a TFC whose snapshot is at height F only if P >= F + `σ` + 1: the `σ` carried headers F+1 ..= F+`σ`, then the carrier. This is a bc-block validity rule, beside Valid Context, Extension and Last Final Snapshot. Checking it takes a PoW -> PoS -> PoW lookup: resolve the pointer to its TFC, take the TFC's snapshot, look up its height. A block whose snapshot is not yet known is deferred, not rejected.
+
+<details>
+<summary><strong>Implementation detail</strong>: block templates</summary>
+
+Block templates apply the same test, so a miner is never handed a TFC it could not include.
+
+</details>
 
 ### Rolling, not batch
 
-An honest proposer carries the `σ`-block tail of its own best chain. If that tail would break Linearity (e.g. after a PoW reorg below the last final snapshot), it repeats its parent's headers instead. A decision at PoW tip T therefore finalizes T - `σ`. Each decision advances the snapshot by however many PoW blocks arrived since the last decision. It repeats the snapshot when no block arrived and jumps several blocks when decisions are slow. This rolling window is how the construction already works; it does not depend on incentives.
+An honest proposer carries the `σ`-block tail of its own best chain. If that tail would break Linearity (e.g. after a PoW reorg below the last final snapshot), it repeats its parent's headers instead. A decision at PoW tip T therefore finalizes T - `σ`. Each decision advances the snapshot by however many PoW blocks arrived since the last decision. It repeats the snapshot when no block arrived and jumps several blocks when decisions are slow.
 
-**Deviations from the *TFL Book*'s honest proposer:**
+<details>
+<summary><strong>Other details</strong>: the rolling window is inherent</summary>
+
+This rolling window is how the construction already works; it does not depend on incentives.
+
+</details>
+
+<details>
+<summary><strong>Implementation detail</strong>: deviations from the <em>TFL Book</em>'s honest proposer</summary>
+
 - Our proposer clamps the snapshot to at most 40 blocks above the previous final snapshot. When the clamp binds, the proposal is a window ending below the tip. That still satisfies Tail Confirmation. The clamp is a heuristic, not part of Crosslink 2.
 - Where the honest proposer would repeat its parent's headers, ours makes no proposal. It declines when the tail would break Linearity, when the candidate would not improve on the last final snapshot, and when a PoW reorg lands between reading the tip and reading the tail. How often a proposer should repeat instead is not yet decided. Both are proposer behavior, not validity rules: a validator cannot tell whether the headers were the proposer's best-chain tail.
+
+</details>
 
 ### Finality lag
 
@@ -156,15 +243,25 @@ A finalizer cannot vote on a proposal whose candidate it has not fully validated
 
 Conventionally a proposal or block is valid or invalid. Crosslink adds "not yet determinable" on both sides: the node is waiting for data before it can take a position. That data may never arrive — a malicious peer can reference a hash for which nothing exists — so "pending" must be a state that can expire or be abandoned, never one the node blocks on indefinitely. [TBC: the exact rule.]
 
-### Threat model
+<details>
+<summary><strong>Rationale</strong>: threat model</summary>
 
 Robustness to malicious peers — dangling references, withheld data, attempts to wedge validation — is a standing constraint. Hash-only pointers, the third state, and tolerance for data that never arrives all follow from it.
+
+</details>
 
 <a id="section-6"></a>
 
 ## 6. THE BFT IMPLEMENTATION
 
+The BFT layer is Tendermint-derived, with the ternary validity state (section 5) encoded in the protocol itself.
+
+<details>
+<summary><strong>Implementation detail</strong>: Tenderlink</summary>
+
 The BFT layer (Tenderlink) is a reimplementation of Tendermint. Reuse was not possible because the ternary validity state must be encoded in the protocol itself.
+
+</details>
 
 One property shapes the whole economic design: peers reach consensus on the decision for a certificate (was it approved by two thirds of stake-weighted power?), but different peers may hold different subsets of the votes that made up that two thirds. The outcome is agreed; the exact signature set is not. The protocol therefore cannot use "who voted for what" as evidence for anything — not slashing, not per-vote payouts. See sections 11 and 16.
 
@@ -174,7 +271,8 @@ A second assumption of Tendermint matters for slashing: every finalizer must hav
 
 ## 7. NETWORKING AND SYNC
 
-### What went wrong with the existing stack
+<details>
+<summary><strong>Rationale</strong>: what went wrong with the existing stack</summary>
 
 Zcash's sync layer assumes one logical chain in which every block has one parent, so a suffix connecting to a known ancestor is enough to validate everything in it. It bulk-syncs infrequently, and any validation failure triggers a long timeout. Crosslink has two logical chains, each needing knowledge of the other to progress, which produces round-trips like:
 
@@ -184,59 +282,112 @@ In workshops at an increased block rate, sync was too slow: people diverged by o
 
 `σ`-based security depends on sufficiently fast sync, so this is a security requirement, not just a usability one.
 
-### Interim solution: Tenderlink networking and PoWLink
+</details>
+
+<details>
+<summary><strong>Implementation detail</strong>: interim solution — Tenderlink networking and PoWLink</summary>
 
 Tenderlink networking is a custom, encrypted-from-the-ground-up (NOISE/Snow) datagram protocol. Keys rather than certificates provide identity and addressing. Packets are MTU-sized with application-level fragmentation and application-controlled (naive) resend and specific-peer targeting; there is no congestion control. Proposals span many packets, votes pack many into one, status messages are one-to-one.
 
 PoWLink is a reliable-stream side channel that downloads PoW blocks and submits them to PoW state. It exploits finality directly to linearise and find the required chain — in effect "more frequent checkpoints" — and is "always up" rather than periodic. Its gain is discovery speed more than raw download speed.
 
+</details>
+
 ### The new networking stack
 
-Requirements: "little and often" and "high-bandwidth serial beaming"; reliable and unreliable transport; large datagrams; multiple streams per connection; forward and backward secrecy; connection migration and rekeying; upgradeable-but-not-downgradable crypto; high bandwidth, high ping and high jitter; identical API over Nym mixnet and direct connections; and the recognition that networking is CPU work, not just I/O waiting. It is not expected to be compatible with Bitcoin-style sync. Requirements are being coordinated with Nym, ZF and Tachyon.
+Requirements: "little and often" and "high-bandwidth serial beaming"; reliable and unreliable transport; large datagrams; multiple streams per connection; forward and backward secrecy; connection migration and rekeying; upgradeable-but-not-downgradable crypto; high bandwidth, high ping and high jitter; identical API over Nym mixnet and direct connections; and the recognition that networking is CPU work, not just I/O waiting. It is not expected to be compatible with Bitcoin-style sync.
+
+<details>
+<summary><strong>Other details</strong>: coordination</summary>
+
+Requirements are being coordinated with Nym, ZF and Tachyon.
+
+</details>
 
 **Three layers:**
 
-- **1. Transport** — use-case agnostic: congestion control (ECN, loss, bytes in flight), MTU discovery and BDP, bulk transfer with acking, minimally blocking. Data packets are all the same size for indistinguishability. Possible later: opt-in RaptorQ-style loss recovery, compression, "packlet" framing for small items.
+- **1. Transport** — use-case agnostic: congestion control (ECN, loss, bytes in flight), MTU discovery and BDP, bulk transfer with acking, minimally blocking. Data packets are all the same size for indistinguishability.
 - **2. P2P** — probably application-transparent: gossip, UDP hole punching via a third party. Hard-NAT clients (phone wallets) are expected to use a client-server model, which the protocol is designed to support well.
 - **3. Application** — sensitive-metadata announcements over Nym (tx announcements; optionally BFT messages and newly mined blocks), BFT and PoW block sync, BFT votes, lightwalletd traffic, bootstrap (DNS?).
 
 **Non-goals for now:** multiple NICs, one logical client in multiple physical locations, rapid reopen of identical connections, symmetric-NAT traversal, local-endpoint discovery, packet relay.
 
+<details>
+<summary><strong>Other details</strong>: possible later transport features</summary>
+
+Possible later: opt-in RaptorQ-style loss recovery, compression, "packlet" framing for small items.
+
+</details>
+
+<details>
+<summary><strong>Rationale</strong>: why not QUIC or libp2p</summary>
+
 **Why not QUIC:** no Nym path; TLS is redundant with NOISE and brings certificate authorities and downgrade concerns; complexity and audit surface.
 
 **Why not libp2p:** misaligned goals (NAT-poor, relay-heavy, broadcast only), too modular to use effectively, large code volume, pub-sub is the wrong model since every message is globally relevant and should always be gossiped, DHT is unneeded, and it would be a heavy non-Zcash supply-chain dependency for a key component.
 
+</details>
+
 ### Interleaving
 
+<details>
+<summary><strong>Implementation detail</strong>: interleaving the two sync streams</summary>
+
 The two streams are currently handled separately. Interleaving them in a serializable order is planned but not done.
+
+</details>
 
 <a id="section-8"></a>
 
 ## 8. BOOTSTRAP AND ACTIVATION
 
-The BFT chain has no external genesis. It is started deterministically by every node from PoW state alone; nothing about genesis is received from the network or agreed by a separate process. This section records how, since the safety argument otherwise lives only in code.
+The BFT chain has no external genesis. It is started deterministically by every node from PoW state alone; nothing about genesis is received from the network or agreed by a separate process.
 
-### Heights (as implemented)
+<details>
+<summary><strong>Other details</strong>: why this section exists</summary>
+
+This section records how, since the safety argument otherwise lives only in code.
+
+</details>
+
+### Heights
+
+`h1` (`BOOTSTRAP_ROSTER_HEIGHT`): The PoW block whose staking state supplies the roster that votes on BFT height 0.
+
+`h2` (`BOOTSTRAP_ACTIVATION_HEIGHT`): The PoW height at which a node walks back, finalizes `h1`, and starts BFT. Every PoW block at or below `h2` must carry a nil fat pointer; the first non-nil pointer can appear only above `h2`.
+
+`h2` - `h1` > `MAX_BLOCK_REORG_HEIGHT`.
+
+At activation every block in [0, `h1`] becomes de facto finalized.
+
+<details>
+<summary><strong>Implementation detail</strong>: heights as implemented</summary>
 
 `BOOTSTRAP_ROSTER_HEIGHT = STAKING_PERIOD / 2` (call it `h1`)
 
 `BOOTSTRAP_ACTIVATION_HEIGHT = h1 + 200` (call it `h2`)
 
-`h1`: The PoW block whose staking state supplies the roster that votes on BFT height 0.
+There is a compile-time assertion that `h2` - `h1` > `MAX_BLOCK_REORG_HEIGHT`.
 
-`h2`: The PoW height at which a node walks back, finalizes `h1`, and starts BFT. Every PoW block at or below `h2` must carry a nil fat pointer; the first non-nil pointer can appear only above `h2`.
+</details>
 
-### Safety argument
+<details>
+<summary><strong>Rationale</strong>: safety argument</summary>
 
-There is a compile-time assertion that `h2` - `h1` > `MAX_BLOCK_REORG_HEIGHT`. By the time any node reaches `h2`, block `h1` is below the reorg limit and therefore identical on every chain a node could be following. So every node computes the same roster from `h1`, constructs the same BFT genesis, and the Tendermint requirement that all finalizers share one view of the roster (section 6) holds from the first round without any coordination.
+By the time any node reaches `h2`, block `h1` is below the reorg limit and therefore identical on every chain a node could be following. So every node computes the same roster from `h1`, constructs the same BFT genesis, and the Tendermint requirement that all finalizers share one view of the roster (section 6) holds from the first round without any coordination.
 
 This is the bootstrap instance of the general rule in section 16: the roster is a pure function of finalized PoW state, and the finality in question here is reorg-depth finality rather than BFT finality.
 
-### Relation to the three-height plan in the notes
+</details>
+
+<details>
+<summary><strong>Other details</strong>: relation to the three-height plan in the notes, and BFT genesis</summary>
 
 The rewards notes describe three heights: `H1` (staking transactions activate), `H2` (roster is determined), `H3` (first block that may point at a certificate), with `H2` and `H3` fixed in one governance decision and `H2` perhaps `H3` minus 100,000. The code's `h1` corresponds to the notes' `H2` and the code's `h2` to the notes' `H3`; the notes' `H1` (activation of staking actions) is not a separate constant in the code as described. [TBC: reconcile naming, and confirm whether the 200-block gap is a development value versus the ~100,000 suggested for mainnet.]
 
-At activation every block in [0, `h1`] becomes de facto finalized. Whether BFT genesis should point at the PoW genesis or at `h1` remains open.
+Whether BFT genesis should point at the PoW genesis or at `h1` remains open.
+
+</details>
 
 <a id="part-iii"></a>
 
@@ -246,15 +397,20 @@ At activation every block in [0, `h1`] becomes de facto finalized. Whether BFT g
 
 ## 9. STICKY FORK CHOICE
 
-Every node, and in particular every miner, must choose a best chain given information from both chains. The spectrum:
+Every node, and in particular every miner, must choose a best chain given information from both chains.
 
-### Raw work (Crosslink 2's unmodified fork choice)
+<details>
+<summary><strong>Rationale</strong>: alternatives on the spectrum</summary>
+
+#### Raw work (Crosslink 2's unmodified fork choice)
 
 Most work wins. A node can follow a heavier chain that excludes its own finalized block. The finalized point is then left on an abandoned branch.
 
-### Follow the latest BFT snapshot (the *TFL Book*'s "Questions" rule)
+#### Follow the latest BFT snapshot (the *TFL Book*'s "Questions" rule)
 
 The best chain must extend the snapshot of the newest final TFC in view. That point need not be on any chain the node has selected, nor `σ`-confirmed in one. The Book's author concludes "Probably not".
+
+</details>
 
 ### Sticky fork choice — our rule
 
@@ -341,19 +497,33 @@ graph TD
 - A PoW block on my best chain cites that decision in its `context_bft`. Once that block is my best tip, `fin` ratchets up to its candidate. I will never again switch to a chain lacking it.
 - A side chain carries newer decisions. I sync it anyway, store its blocks and decisions outside the finalized state, and track bonds along it (I need that for the roster, section 11). Under Linearity it contains my `fin`, so it stays eligible.
 - If it ever has more work than my chain, I switch, on work alone. `fin` then ratchets to that chain's candidate.
-- A heavier chain that forks below my `fin`: I refuse it, whatever its work. This refused switch is the only observable sign of a finality conflict. It is logged; a persisted hazard record is still TODO.
+- A heavier chain that forks below my `fin`: I refuse it, whatever its work. This refused switch is the only observable sign of a finality conflict.
+
+<details>
+<summary><strong>Implementation detail</strong>: logging finality conflicts, and Zebra's reorg-depth commit</summary>
+
+A refused switch is logged; a persisted hazard record is still TODO.
 
 Caveat: Zebra also commits blocks at reorg depth (`MAX_BLOCK_REORG_HEIGHT`). If my best chain runs that far past the fork to `bft_final_snapshot`, the depth commit conflicts with it and I can never switch back. Under Linearity my branch then never finalizes again until I resync.
 
-### Why
+</details>
+
+<details>
+<summary><strong>Rationale</strong>: why this rule</summary>
 
 BFT does not choose the chain. It only ratchets a floor under the work rule, and only to points my own work-selected chain already has `σ` deep. An advance of `fin` never causes a switch. The rule departs from raw work only when a heavier chain excludes `fin`. By construction that would displace a prefix `σ`-confirmed on my own earlier best chain. While BFT is stalled or withholding, `fin` is frozen and selection above it is plain most-work, so PoW stays the Schelling point.
 
-What this does not buy:
+</details>
+
+<details>
+<summary><strong>Other details</strong>: what this rule does not buy</summary>
+
 - No Stalled Mode, so the gap between `fin` and the tip is unbounded during a stall, and ordinary spends keep landing above `fin`.
 - A miner who dominates the best chain can withhold finality progress by never updating `context_bft`; that costs nothing in validity.
 - A partition in which only one side can finalize past the fork leaves that side permanently unwilling to switch to the other.
 - The *TFL Book* has no safety or liveness proof for this rule. Its liveness argument relies on unmodified fork choice.
+
+</details>
 
 <a id="section-10"></a>
 
@@ -361,19 +531,38 @@ What this does not buy:
 
 ### BFT finality (`bft_final_snapshot`)
 
-The snapshot of the newest decided TFC. It is objective, and possibly on a chain the node does not consider best, for any length of time. "Crosslink finalized" in conversation usually means this.
+The snapshot of the newest decided TFC. It is objective, and possibly on a chain the node does not consider best, for any length of time.
+
+<details>
+<summary><strong>Other details</strong>: usage in conversation</summary>
+
+"Crosslink finalized" in conversation usually means this.
+
+</details>
 
 ### Local finality (`fin` / `local_finalized_tip`)
 
-The node will not reorg past this block. It is node-local and monotone, advanced only from `candidate(best)` as in section 9. It always lies on the best chain and is at or below `bft_final_snapshot` (under Linearity). It is persisted in the finalized database as its own hash.
+The node will not reorg past this block. It is node-local and monotone, advanced only from `candidate(best)` as in section 9. It always lies on the best chain and is at or below `bft_final_snapshot` (under Linearity).
 
-### Database finalized tip
+<details>
+<summary><strong>Implementation detail</strong>: persistence of <code>fin</code>, and the database finalized tip</summary>
 
-Not finality. It is the higher of `fin` and Zebra's reorg-depth commit, so it can be above `fin`. It is a physical commit boundary, not a cache of `fin`. Never report it as Crosslink finality. Finality readers take `fin`.
+`fin` is persisted in the finalized database as its own hash.
+
+**Database finalized tip.** Not finality. It is the higher of `fin` and Zebra's reorg-depth commit, so it can be above `fin`. It is a physical commit boundary, not a cache of `fin`. Never report it as Crosslink finality. Finality readers take `fin`.
+
+</details>
 
 No protocol quantity lies between the best tip and `fin`. A "confirmed" display is plain PoW confirmation depth, never final.
 
-Consensus must never read `fin`. Honest nodes reach the same chain through different histories, so their `fin` values are only prefix-compatible, not equal. Anything every node must compute identically comes from objective chain data:
+Consensus must never read `fin`. Anything every node must compute identically comes from objective chain data:
+
+<details>
+<summary><strong>Rationale</strong>: why consensus must not read <code>fin</code></summary>
+
+Honest nodes reach the same chain through different histories, so their `fin` values are only prefix-compatible, not equal.
+
+</details>
 
 ### Roster for BFT height H
 
@@ -399,7 +588,14 @@ Participants in the BFT layer are finalizers. A finalizer's voting power is the 
 
 ### Active and inactive rosters
 
-Finalizers are split into an active roster and an inactive roster. The split exists for performance and technical reasons — it bounds the number of parties per BFT round — and is not a reward or penalty mechanism. The roster for a given certificate must be a pure function of finalized PoW state plus the slashing config (section 16). The active roster is selected as the top N finalizers when sorted by voting power, where N is the active roster length (a fixed constant).
+Finalizers are split into an active roster and an inactive roster. The roster for a given certificate must be a pure function of finalized PoW state plus the slashing config (section 16). The active roster is selected as the top N finalizers when sorted by voting power, where N is the active roster length (a fixed constant).
+
+<details>
+<summary><strong>Rationale</strong>: why two rosters</summary>
+
+The split exists for performance and technical reasons — it bounds the number of parties per BFT round — and is not a reward or penalty mechanism.
+
+</details>
 
 ### Finalizers opt in
 
@@ -407,13 +603,27 @@ A finalizer publishes an address that acts as a capability carrying its own sign
 
 ### Who is behind a finalizer
 
-Crosslink has no internal web of trust. The expectation is that Zcash organisations will attest outside the protocol that a finalizer is run by a particular provider or company, and that users can combine several attestations into a reasonable judgement.
+Crosslink has no internal web of trust.
+
+<details>
+<summary><strong>Other details</strong>: off-protocol attestation, and a possible signed-message channel</summary>
+
+The expectation is that Zcash organisations will attest outside the protocol that a finalizer is run by a particular provider or company, and that users can combine several attestations into a reasonable judgement.
 
 A possible built-in feature: since finalizers already have keys, they could sign short, namespaced messages that nodes gossip at a rate limit of about one per active finalizer — "down for maintenance Tuesday; planned, not malice." Today such notices go out on forums or social media, unlinked to the on-chain identity. The most important use would be during a slash fork, where finalizers need to signal which side they will be on. [Idea only.]
 
+</details>
+
 ### Uniformity, and no automatic slashing
 
-Because peers do not agree on exact vote sets (section 6), the protocol cannot reward or punish individual votes. So there is no automatic slashing, and all active finalizers are paid uniformly at the same time. Punishment is a social process (section 16).
+There is no automatic slashing, and all active finalizers are paid uniformly at the same time. Punishment is a social process (section 16).
+
+<details>
+<summary><strong>Rationale</strong>: why uniform, and why no automatic slashing</summary>
+
+Because peers do not agree on exact vote sets (section 6), the protocol cannot reward or punish individual votes.
+
+</details>
 
 <a id="section-12"></a>
 
@@ -425,12 +635,23 @@ Delegation of stake from anyone (including finalizers themselves) to a finalizer
 
 A user spends shielded funds in a transaction carrying a staking action. "Create delegation bond" specifies:
 
-- an amount, which must be a power of ten ZEC — privacy quantization, so bonds cannot be fingerprinted by size;
+- an amount, which must be a power of ten ZEC;
 - a target finalizer, via its consent capability.
 
-The result is a bond: a free-floating note controlled by an Ed25519 key. Holding the key is holding the bond, so it can be operated anonymously, decoupled from the funds that created it. The key is derived from the create action plus a salt, so repeated identical delegations yield distinct, untangled bonds.
+The result is a bond: a free-floating note controlled by an Ed25519 key. Holding the key is holding the bond. The key is derived from the create action plus a salt.
+
+The total staked to each finalizer is public.
+
+<details>
+<summary><strong>Rationale</strong>: privacy properties of bonds</summary>
+
+The power-of-ten amount is privacy quantization, so bonds cannot be fingerprinted by size.
+
+Because holding the key is holding the bond, it can be operated anonymously, decoupled from the funds that created it. Deriving the key with a salt means repeated identical delegations yield distinct, untangled bonds.
 
 The privacy trade-off: bonds are anonymous, but the total staked to each finalizer is public. That total is what voting weight is computed from, so it has to be.
+
+</details>
 
 ### Bonds are atomic
 
@@ -438,7 +659,14 @@ Bonds cannot be split; retarget, unbond and withdraw act on the whole bond.
 
 ### Retargeting
 
-A bond can be retargeted at any time. The transaction records both old and new target, so from the bond state at time t the retargets can be played backwards to recover the mapping at any earlier time. Slashing depends on this.
+A bond can be retargeted at any time. The transaction records both old and new target, so from the bond state at time t the retargets can be played backwards to recover the mapping at any earlier time.
+
+<details>
+<summary><strong>Rationale</strong>: why retargets record the old target</summary>
+
+Slashing depends on this.
+
+</details>
 
 ### Withdrawing: unbond, then withdraw
 
@@ -447,7 +675,12 @@ Two actions on two different staking days (section 13), so minimum exit is two w
 1. Unbond. Value depends on which block it lands in; once landed, the bond has a fixed numeric value.
 2. Withdraw. The transaction must state that value explicitly and match the chain exactly, or it is invalid.
 
+<details>
+<summary><strong>Rationale</strong>: why two steps</summary>
+
 Two reasons. Accounting clarity: before funds re-enter ordinary Zcash transaction land their amount must be an explicit number, not implicit ledger state. Security: the enforced delay is what puts stake genuinely at risk — if an attack is discovered there is time to slash before the funds escape into the shielded pool.
+
+</details>
 
 <a id="section-13"></a>
 
@@ -455,18 +688,26 @@ Two reasons. Accounting clarity: before funds re-enter ordinary Zcash transactio
 
 One day per week is a staking day. Bond creation, unbond and withdraw are quantized to staking days.
 
+The slash window (section 16) is also measured in staking days.
+
+<details>
+<summary><strong>Rationale</strong>: why staking days</summary>
+
 - Privacy: batching activity into one day per week removes timing information that could link actions to users.
 - Security: unbond and withdraw on successive staking days gives the two-week minimum exit.
 
-The slash window (section 16) is also measured in staking days.
+</details>
 
 <a id="section-14"></a>
 
 ## 14. REWARDS
 
-### Design stance: smooth enforcement
+<details>
+<summary><strong>Rationale</strong>: design stance — smooth enforcement</summary>
 
 The economic design leans on withheld income rather than destroyed funds. Uniform, conditional payouts make staking feel like mining: put money in, earn while the system works, and if the system is attacked or stalls you lose income, not principal. Missed income is a far smoother enforcement mechanism than burning, and it means stakers are rewarded or not for the mechanism as a whole working — never for particular finalizer or miner behaviour. Destruction of funds is reserved for the case where users identify a staker as having aided or been totally negligent in an attack, via a slash fork (Part V).
+
+</details>
 
 ### Proposed issuance split
 
@@ -489,41 +730,75 @@ IF a PoW block points at a new certificate, AND that certificate finalizes a PoW
 
 "Close to the tip" is measured entirely on the PoW chain: this block points to a certificate, which points to a PoW block; the delta between those two PoW heights is the distance.
 
-This one rule serves several purposes:
+<details>
+<summary><strong>Rationale</strong>: the purposes this one rule serves</summary>
+
 - First-inclusion miner bounty: miners are paid to advance finality monotonically rather than reuse a stale pointer (audit item R2).
 - Anti-jackpot: rewards cannot accumulate while finality is stalled (R4). Because the reward is single-shot per block, nothing is ever accrued or recalculated; accumulated values need not be stored anywhere. Bounty sniping is not an issue in steady state and at most a flaky-finalizer concern.
-- Certificate aging by another route: instead of expiring old certificates, catch-up is incentivized by withholding rewards from finalizations far behind the tip (R6). During catch-up the current heuristic is roughly 40 blocks per certificate; finalizers are incentivized to coordinate quickly on a known shared prefix rather than skip ahead to unshared tips, because otherwise they earn nothing. This is an incentive, not a consensus constraint. (Aside: FlyClient-style proofs might help finalizers establish a shared prefix fast.)
+- Certificate aging by another route: instead of expiring old certificates, catch-up is incentivized by withholding rewards from finalizations far behind the tip (R6). During catch-up the current heuristic is roughly 40 blocks per certificate; finalizers are incentivized to coordinate quickly on a known shared prefix rather than skip ahead to unshared tips, because otherwise they earn nothing. This is an incentive, not a consensus constraint.
 - Slash forks suspend payouts for their duration, since the pointer stops advancing. This does not disincentivize spring-cleaning forks: their BFT activation is `u32::MAX`, so they are a single point of cremation rather than a stall.
+
+</details>
+
+<details>
+<summary><strong>Other details</strong>: FlyClient aside</summary>
+
+FlyClient-style proofs might help finalizers establish a shared prefix fast.
+
+</details>
 
 ### Bonds always earn
 
-A bond accrues reward whether or not its finalizer is on the active roster. Backing an up-and-coming finalizer costs nothing — deliberate anti-centralization.
+A bond accrues reward whether or not its finalizer is on the active roster.
+
+<details>
+<summary><strong>Rationale</strong>: anti-centralization</summary>
+
+Backing an up-and-coming finalizer costs nothing — deliberate anti-centralization.
+
+</details>
+
+<details>
+<summary><strong>Other details</strong>: open question on the 10% denominator</summary>
 
 Open: is delegating to a non-active finalizer a "vote of no confidence" in the active roster, such that finalizer commission should shrink — i.e. should the 10% denominator be active-roster stake or total stake? ("Vote of no confidence" versus "pay for infrastructure".)
+
+</details>
 
 ### Finalizer lockboxes (bank accounts)
 
 The 10% goes into a per-finalizer lockbox balance on the ledger. A staking action turns lockbox balance into a bond. The lockbox itself also behaves as a virtual bond delegated to its finalizer, so it accrues from both sources: from the 90% like any bond (per total), and from the 10% (per total, or per active-roster member on each new block — open). Ordinary bonds accrue only from the 90%.
 
+<details>
+<summary><strong>Implementation detail</strong>: burns and acceleration for lockboxes</summary>
+
 Burns are an extra complication: normal burns come from transactions, whereas these would be implicit or a new data member, and different burn designs have different complexity costs.
 
 Because the active roster is bounded, lockboxes should not need the acceleration structure of section 15, though computing "active" as well as "total" stake is a small addition that is needed for Tenderlink anyway.
+
+</details>
 
 <a id="section-15"></a>
 
 ## 15. ACCOUNTING AND THE ACCELERATION STRUCTURE
 
-### Why
+Every party, at every query resolution, must agree exactly on the value produced for each recipient.
+
+<details>
+<summary><strong>Rationale</strong>: why an acceleration structure, and why determinism over precision</summary>
 
 Very many unmergeable bonds; finalizers, miners and wallets need fast answers (finalizer weight, what is final, what my bonds are worth). An acceleration structure over bonds is required, and it depends on payout details, so it follows them.
 
-### Defer everything
+Integer zatoshis divided by an arbitrary total stake guarantee some rounding error. It is minor and should be apportioned sensibly, but the requirement above stands. Determinism beats precision.
+
+</details>
+
+<details>
+<summary><strong>Implementation detail</strong>: defer everything</summary>
 
 Bond creation is cheap; ongoing work is per-finalizer and global; an individual bond's value is computed only on query or at unbond. Single-shot rewards (section 14) help here: nothing accumulates.
 
-### Rounding
-
-Integer zatoshis divided by an arbitrary total stake guarantee some rounding error. It is minor and should be apportioned sensibly, but the requirement is that every party, at every query resolution, agrees exactly on the value produced for each recipient. Determinism beats precision.
+</details>
 
 <a id="part-v"></a>
 
@@ -535,29 +810,45 @@ Integer zatoshis divided by an arbitrary total stake guarantee some rounding err
 
 There is no automatic slashing (sections 6, 11). Punishment of stake behind misbehaving finalizers is a user-coordinated hard fork.
 
-### Why social
+<details>
+<summary><strong>Rationale</strong>: why social</summary>
 
 The protocol cannot agree on vote sets, and "well behaved" is fuzzy: a stall can never be proven permanent. The judgement is left to users, aided by visualization tools that inform but cannot decide.
+
+</details>
 
 ### Hard constraints on how a slash may work
 
 1. The updated roster must be a pure function of finalized PoW state plus the slashing config. It may not depend on any PoW data not already implied by shared certificates. Tendermint assumes every finalizer has an identical view of the roster, and side chains may validly disagree about recent PoW, so:
 - the new roster cannot be derived from staking actions up to the activation tip, and
 - it cannot use "the highest certificate the PoW chain points at", since chains may disagree on what that is.
-2. Staking actions that have landed in the PoW chain must be respected. Justice: most are unrelated to any slashed finalizer. Practicality: reclaiming them would need extra machinery. PR: in a long stall, ignoring them would look like a huge reorg.
+2. Staking actions that have landed in the PoW chain must be respected.
 3. PoS stores no ledger information of its own.
 
 4. Application must be robust to users, miners and finalizers adopting the config at different times; no accidental hard forks from unspecified race conditions.
 
-### Design virtues (soft constraints)
+<details>
+<summary><strong>Rationale</strong>: why landed staking actions must be respected; design virtues</summary>
 
-Users should preference-cascade to the same input values, so fewer degrees of freedom is better. Users should be able to decide at a suitable resolution. Negligent stakers should be slashed and non-negligent ones not. Miners and finalizers should not be over-weighted in the decision. Roster computation should be cheap in memory and CPU. Forks should be deferred where possible.
+Justice: most are unrelated to any slashed finalizer. Practicality: reclaiming them would need extra machinery. PR: in a long stall, ignoring them would look like a huge reorg.
+
+**Design virtues (soft constraints).** Users should preference-cascade to the same input values, so fewer degrees of freedom is better. Users should be able to decide at a suitable resolution. Negligent stakers should be slashed and non-negligent ones not. Miners and finalizers should not be over-weighted in the decision. Roster computation should be cheap in memory and CPU. Forks should be deferred where possible.
+
+</details>
 
 ### Triggering a slash
 
-Node operators modify their config to list the finalizer(s) to slash and a PoW activation height. Every slash event is a hard fork; there is no default switch, and currently nothing nudges a node onto a fork (a warning system may be added).
+Node operators modify their config to list the finalizer(s) to slash and a PoW activation height. Every slash event is a hard fork; there is no default switch.
 
-### Why a config, not something else
+<details>
+<summary><strong>Implementation detail</strong>: nudging nodes onto a fork</summary>
+
+Currently nothing nudges a node onto a fork (a warning system may be added).
+
+</details>
+
+<details>
+<summary><strong>Rationale</strong>: why a config, not something else</summary>
 
 Two goals pulled in different directions: users should have a large amount of control, so the decision is not centralised; but it should also be easy for everyone to agree on the same thing and decide the same way, because divergent decisions mean multiple hard forks.
 
@@ -567,6 +858,8 @@ The alternative considered was having users edit the code directly. It was rejec
 - a config lets non-programmers have meaningful input.
 
 A config with few degrees of freedom satisfies both goals: users decide, but there are few enough choices that they converge.
+
+</details>
 
 ### Two components
 
@@ -580,17 +873,37 @@ Jails the named finalizer(s) from voting in current and subsequent rounds; their
 
 ### Bridging the fork: the "do not include by" height
 
-PoW must not be disrupted while nodes switch. BFT has stalled; old PoW blocks keep pointing at the last old certificate; once enough finalizers adopt the fork, the reduced set produces new certificates, which must not leak into PoW before activation. So each certificate carries a "do not include by" PoW height, monotonically non-decreasing, which may only increase in the first certificate of a forked chain — the one embedding the slash config. The forked set resumes immediately on the BFT side while PoW transitions at one agreed height.
+Each certificate carries a "do not include by" PoW height, monotonically non-decreasing, which may only increase in the first certificate of a forked chain — the one embedding the slash config. The forked set resumes immediately on the BFT side while PoW transitions at one agreed height.
+
+<details>
+<summary><strong>Rationale</strong>: why the "do not include by" height</summary>
+
+PoW must not be disrupted while nodes switch. BFT has stalled; old PoW blocks keep pointing at the last old certificate; once enough finalizers adopt the fork, the reduced set produces new certificates, which must not leak into PoW before activation.
+
+</details>
 
 ### How nodes on different configs see each other
 
-Votes are cryptographically namespaced by config, so nodes on different configs diverge immediately, and currently the other side looks like malicious nonsense. This should be improved so a node can recognise "well behaved, different worldview". [TBC.]
+Votes are cryptographically namespaced by config, so nodes on different configs diverge immediately.
 
-### A big stick
+<details>
+<summary><strong>Implementation detail</strong>: how the other side currently appears</summary>
+
+Currently the other side looks like malicious nonsense. This should be improved so a node can recognise "well behaved, different worldview". [TBC.]
+
+</details>
+
+<details>
+<summary><strong>Rationale</strong>: a big stick</summary>
 
 A slash fork needs buy-in from essentially every node. Obvious cases behave like a network upgrade; splinter groups would leave no apparent canonical chain. The intended dynamic is that misbehaviour is obvious early and honest stakers retarget away in time — the threat moves stake, the burn is the fallback.
 
+</details>
+
 ### Scenarios
+
+<details>
+<summary><strong>Other details</strong>: outright stall, flaky stall, spring cleaning, other malicious behaviour</summary>
 
 #### Outright stall
 
@@ -608,9 +921,14 @@ No stall, but the stake-weighted share actually voting drifts down toward two th
 
 [TBC: not yet elaborated.]
 
+</details>
+
 <a id="part-vi"></a>
 
 # PART VI — OPEN QUESTIONS
+
+<details>
+<summary><strong>Other details</strong>: open questions</summary>
 
 ### Header and encoding
 
@@ -658,3 +976,5 @@ No stall, but the stake-weighted share actually voting drifts down toward two th
 
 - Andrew had one further point at the end of session 5 that slipped his mind.
 - Off-topic musing from the rewards notes: pay miners by block fullness rather than tx fees?
+
+</details>
