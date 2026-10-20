@@ -472,11 +472,14 @@ The economic design leans on withheld income rather than destroyed funds. Unifor
 
 Of post-dev-fund issuance (ignoring the initial 20% deduction):
 
-48%  miner subsidy 48%  staking rewards (finalizers and stakers) 4%  miner bounty for including a new finality
+- 48% — miner subsidy
+- 48% — staking rewards (finalizers and stakers)
+- 4% — miner bounty for including a new finality
 
 Within the 48% staking share, the split is 90/10:
 
-90%  to bonds, pro rata by size against total stake 10%  to active finalizers, uniformly
+- 90% — to bonds, pro rata by size against total stake
+- 10% — to active finalizers, uniformly
 
 The 90% includes finalizers staking to themselves. Rewards come from a fixed pool; there is no guaranteed percentage yield.
 
