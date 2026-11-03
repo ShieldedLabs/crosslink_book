@@ -2,6 +2,8 @@
 
 Here we give an overview of how the Zcash protocol with Crosslink enabled distributes protocol rewards.
 
+XXX: TODO: get more precise about how finality interacts with rewards, specifically if rewards are proportional to "latest final state" or "most recent PoW state".
+
 ## The ZEC Supply Policy
 
 We conceptualize all abstract rules about the `ZEC` asset's ownership and accounting as the *ZEC Supply Policy*. This policy is not an emergent property of (any version of) the Zcash consensus protocol, and is instead an explicit part of the conceptual design which protocol implementations and changes are evaluated against.
