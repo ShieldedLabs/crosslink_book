@@ -11,6 +11,20 @@ const POW_STYLES = `
     classDef powAlt fill:#ffcc80,stroke:#01579b,stroke-width:3px,color:#000
 `;
 
+// Crosslink finality styles, used together with the PoW styles above
+const FINALITY_STYLES = `
+    %% Define PoS / BFT block style with dark red border
+    classDef bft fill:#fff,stroke:#b71c1c,stroke-width:3px,color:#000
+    %% Define style for the BFT block that a PoW block's context_bft makes final, LF(H)
+    classDef lf fill:#ffcdd2,stroke:#b71c1c,stroke-width:3px,color:#000
+    %% Define style for a BFT proposal that the validity rules reject
+    classDef rejected fill:#fff,stroke:#b71c1c,stroke-width:2px,stroke-dasharray:5 4,color:#000
+    %% Define style for the PoW block that is candidate(H), with yellow fill
+    classDef candidate fill:#ffeb3b,stroke:#01579b,stroke-width:3px,color:#000
+    %% Define fin last, so that its border wins over the block style.
+    classDef fin stroke:#8e24aa,stroke-width:7px
+`;
+
 // General node type styles
 const NODE_STYLES = `
     classDef input fill:#e1f5ff,stroke:#01579b,stroke-width:3px,color:#000
@@ -24,6 +38,7 @@ const NODE_STYLES = `
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         POW_STYLES,
+        FINALITY_STYLES,
         NODE_STYLES
     };
 }

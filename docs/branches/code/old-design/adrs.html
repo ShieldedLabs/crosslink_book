@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>adrs.md - Zcash Crosslink: A Visual Tour</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.1.</strong> Consensus Verifiability</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.2.</strong> Incentives Model</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../concepts/finality-and-incentives.html"><strong aria-hidden="true">2.2.1.</strong> Finality & Incentives</a></li></ol></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../spec/bond-actions-and-states.html"><strong aria-hidden="true">3.2.</strong> Bond Actions and States</a></li><li class="chapter-item expanded "><a href="../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.3.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li><li class="chapter-item expanded "><a href="../FINALITY.html"><strong aria-hidden="true">3.4.</strong> Zebra Crosslink Codebase: Finality Semantics</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../guides/tour.html"><strong aria-hidden="true">4.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../guides/tfl-lexicon.html"><strong aria-hidden="true">4.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../guides/finality-and-fork-choice.html"><strong aria-hidden="true">4.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Old Design - Needs Love</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../old-design/adrs.html" class="active"><strong aria-hidden="true">5.1.</strong> adrs.md</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.2.</strong> analysis - FIXME not yet linked</div></li><li class="chapter-item expanded "><a href="../old-design/cl2-construction.html"><strong aria-hidden="true">5.3.</strong> cl2-construction.md</a></li><li class="chapter-item expanded "><a href="../old-design/deliverables.html"><strong aria-hidden="true">5.4.</strong> deliverables.md</a></li><li class="chapter-item expanded "><a href="../old-design/five-component-model.html"><strong aria-hidden="true">5.5.</strong> five-component-model.md</a></li><li class="chapter-item expanded "><a href="../old-design/nutshell.html"><strong aria-hidden="true">5.6.</strong> nutshell.md</a></li><li class="chapter-item expanded "><a href="../old-design/scoping.html"><strong aria-hidden="true">5.7.</strong> scoping.md</a></li><li class="chapter-item expanded "><a href="../old-design/security-properties.html"><strong aria-hidden="true">5.8.</strong> security-properties.md</a></li><li class="chapter-item expanded "><a href="../old-design/terminology.html"><strong aria-hidden="true">5.9.</strong> terminology.md</a></li><li class="chapter-item expanded "><a href="../old-design/userled-emergency-hardforks.html"><strong aria-hidden="true">5.10.</strong> userled-emergency-hardforks.md</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../editing/mermaid-styles.html"><strong aria-hidden="true">6.1.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="crosslink-architecture-decision-records"><a class="header" href="#crosslink-architecture-decision-records">Crosslink Architecture Decision Records</a></h1>
+<p>We use an approach of documenting many design decisions during the implementation of <code>zebra-crosslink</code> via <a href="https://adr.github.io/">Architecture Decision Records</a>, inspired by their use in upstream <code>zebra</code>. These are especially important for our Prototype-then-Productionize approach, since they record key decisions we should review for production readiness.</p>
+<p>Currently ADRs are very rough and tracked on this <a href="https://docs.google.com/spreadsheets/d/1X6dMxrkbWshhy8JwR7WkNC7JuN1J5YKNFzTcR-BolRo/edit?gid=0#gid=0">zebra-crosslink ADR Google Sheet</a>.</p>
+<p>Moving forward we will begin to incorporate them into this codebase.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../guides/finality-and-fork-choice.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../old-design/cl2-construction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../guides/finality-and-fork-choice.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../old-design/cl2-construction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../mermaid.min.js"></script>
+        <script src="../mermaid-init.js"></script>
+        <script src="../mermaid-common-styles.js"></script>
+
+
+    </div>
+    </body>
+</html>
