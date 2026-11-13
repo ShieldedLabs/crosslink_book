@@ -8,6 +8,7 @@
   - [The Five Component Model](./concepts/five-component-model.md)
     - [User-Led Emergency Hardforks](./concepts/user-led-emergency-hardforks.md)
   - [Consensus Verifiability](./concepts/consensus-verifiability.md)
+  - [Ledger State](./concepts/ledger-state.md)
   - [Incentives Model]()
     - [Finality & Incentives](./concepts/finality-and-incentives.md)
   - [Security Properties](./concepts/security-properties.md)
@@ -27,7 +28,6 @@
   - [A Visual Guide to Finality and Fork Choice](./guides/finality-and-fork-choice.md)
 - [Old Design - Needs Love]()
   - [cl2-construction.md](./old-design/cl2-construction.md)
-  - [nutshell.md](./old-design/nutshell.md)
 
 ---
 
