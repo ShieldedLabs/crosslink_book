@@ -3,6 +3,8 @@
 - [Overview](./overview.md)
   - [Design Overview](./overview/design.md)
 - [Design Concepts]()
+  - [The Five Component Model](./concepts/five-component-model.md)
+    - [User-Led Emergency Hardforks](./concepts/user-led-emergency-hardforks.md)
   - [Consensus Verifiability](./concepts/consensus-verifiability.md)
   - [Incentives Model]()
     - [Finality & Incentives](./concepts/finality-and-incentives.md)
@@ -25,10 +27,8 @@
   - [adrs.md](./old-design/adrs.md)
   - [cl2-construction.md](./old-design/cl2-construction.md)
   - [deliverables.md](./old-design/deliverables.md)
-  - [five-component-model.md](./old-design/five-component-model.md)
   - [nutshell.md](./old-design/nutshell.md)
   - [scoping.md](./old-design/scoping.md)
-  - [userled-emergency-hardforks.md](./old-design/userled-emergency-hardforks.md)
 
 ---
 
