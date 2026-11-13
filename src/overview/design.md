@@ -2,7 +2,7 @@
 
 The `zebra-crosslink` design fleshes out and adapts the abstract [Crosslink 2](https://electric-coin-company.github.io/tfl-book/design/crosslink.html) into a working implementation. This includes extending and adapting that construction to include a fully functional BFT protocol, and including staking mechanics, accounting, and associated security reasoning and arguments. Additionally, we explicitly alter some trade-offs, or terminology compared to the abstract construction.
 
-This Design chapter focuses specifically on differences from pure PoW Zcash (using [`zebra`](https://zebra.zfnd.org/) as a reference implementation) and the Crosslink 2 construction. We assume basic familiarity with both. Also, please see our [Terminology](terminology.md) for terms specific to this project.
+This Design chapter focuses specifically on differences from pure PoW Zcash (using [`zebra`](https://zebra.zfnd.org/) as a reference implementation) and the Crosslink 2 construction. We assume basic familiarity with both. Also, please see our [Terminology](../concepts/terminology.md) for terms specific to this project.
 
 We will be refining a [ZIP Draft](https://docs.google.com/document/d/1wSLLReAEe4cM60VMKj0-ze_EHS12DqVoI0QVW8H3X9E/edit?tab=t.0#heading=h.f0ehy0pxr01t) which will enter the formal [ZIP](https://zips.z.cash) process as the prototype approaches maturity and we switch focus to productionization.
 
