@@ -1,7 +1,9 @@
 # Summary
 
 - [Overview](./overview.md)
+  - [Scope and Goals](./overview/scope.md)
   - [Design Overview](./overview/design.md)
+  - [Engineering Deliverables](./overview/deliverables.md)
 - [Design Concepts]()
   - [The Five Component Model](./concepts/five-component-model.md)
     - [User-Led Emergency Hardforks](./concepts/user-led-emergency-hardforks.md)
@@ -26,9 +28,7 @@
 - [Old Design - Needs Love]()
   - [adrs.md](./old-design/adrs.md)
   - [cl2-construction.md](./old-design/cl2-construction.md)
-  - [deliverables.md](./old-design/deliverables.md)
   - [nutshell.md](./old-design/nutshell.md)
-  - [scoping.md](./old-design/scoping.md)
 
 ---
 
