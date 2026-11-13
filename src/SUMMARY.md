@@ -26,7 +26,6 @@
   - [A Visual Lexicon of the TFL Book](./guides/tfl-lexicon.md)
   - [A Visual Guide to Finality and Fork Choice](./guides/finality-and-fork-choice.md)
 - [Old Design - Needs Love]()
-  - [adrs.md](./old-design/adrs.md)
   - [cl2-construction.md](./old-design/cl2-construction.md)
   - [nutshell.md](./old-design/nutshell.md)
 
