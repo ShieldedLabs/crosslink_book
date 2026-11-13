@@ -29,4 +29,5 @@
 ---
 
 - [APPENDIX: Editing This Book]()
+  - [Writing Style](./editing/writing-style.md)
   - [Mermaid Common Styles](./editing/mermaid-styles.md)
