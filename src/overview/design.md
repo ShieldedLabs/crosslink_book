@@ -1,6 +1,6 @@
 # Crosslink Design
 
-The `zebra-crosslink` design fleshes out and adapts the abstract [Crosslink 2](https://daira.github.io/tfl-book/design/crosslink.html) into a working implementation. This includes extending and adapting that construction to include a fully functional BFT protocol, and including staking mechanics, accounting, and associated security reasoning and arguments. Additionally, we explicitly alter some trade-offs, or terminology compared to the abstract construction.
+The `zebra-crosslink` design fleshes out and adapts the abstract [Crosslink 2](https://daira.github.io/tfl-book/design/crosslink.html) into a working implementation. (See [The Crosslink 2 Construction](https://daira.github.io/tfl-book/design/crosslink/construction.html) in the TFL Book for the abstract construction's precise definition.) This includes extending and adapting that construction to include a fully functional BFT protocol, and including staking mechanics, accounting, and associated security reasoning and arguments. Additionally, we explicitly alter some trade-offs, or terminology compared to the abstract construction.
 
 This Design chapter focuses specifically on differences from pure PoW Zcash (using [`zebra`](https://zebra.zfnd.org/) as a reference implementation) and the Crosslink 2 construction. We assume basic familiarity with both. Also, please see our [Terminology](../concepts/terminology.md) for terms specific to this project.
 
@@ -15,3 +15,9 @@ It is especially important that we identify deviations from Zcash PoW consensus,
 - We _intentionally_ prefer a different trade-off to the original design; in which case we should have very explicit rationale documentation about the difference (in an ADR). One example (**TODO**: we may not use ADR format specifically, but the spirit of this needs to be fulfilled) is our ADR-0001 selects a different approach to on-chain signatures than (**TODO**: link to TFL section).
 - Something about the more abstract design makes assumptions we cannot uphold in practice with all of the other implementation constraints. In this case, we need to determine if the upstream design needs to be improved, or we need to alter our implementation constraints.
 - As an expedient, we found it quicker and easier to do something different to get the prototype working, even though we believe the upstream makes better trade-offs. These are prime candidates for improvement during productionization to match the design, or else require persuasive rationale that a "short cut" is worth the trade-offs and risks.
+
+## Design Decision Records
+
+During prototyping of `zebra-crosslink` we documented many design decisions as [Architecture Decision Records](https://adr.github.io/) (ADRs), inspired by their use in upstream `zebra`. These are especially important for our Prototype-then-Productionize approach, since they record key decisions we should review for production readiness.
+
+Those early records are very rough and tracked on this [zebra-crosslink ADR Google Sheet](https://docs.google.com/spreadsheets/d/1X6dMxrkbWshhy8JwR7WkNC7JuN1J5YKNFzTcR-BolRo/edit?gid=0#gid=0). During productionization we are incorporating their substance, including rationales and alternatives considered, into this book, whether or not we keep the ADR format itself.

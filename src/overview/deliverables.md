@@ -1,6 +1,6 @@
-# Engineering Deliverables for Shielded Lab's Crosslink Deployment
+# Engineering Deliverables for Shielded Labs' Crosslink Deployment
 
-This is a draft list of SL's engineering deliverables as part of our Crosslink Deployment project. This list may be refined as the project develops, both to provide greater precision or clarity around deliverables, or to add or potentially remove deliverables (ideally only in early phases of the project lifecycle).
+This is a list of Shielded Labs' engineering deliverables as part of our Crosslink Deployment project. This list may be refined as the project develops, both to provide greater precision or clarity around deliverables, or to add or potentially remove deliverables (ideally only in early phases of the project lifecycle). See the [Shielded Labs' Crosslink Roadmap](https://shieldedlabs.net/roadmap/) for current status.
 
 ## Code Products
 
@@ -16,7 +16,7 @@ The active list of [Code Deliverables](https://github.com/ShieldedLabs/zebra-cro
 
 All code products will be open source and suitable for merging or bundling with [zebra](https://github.com/ZcashFoundation/zebra) source and binary distributions.
 
-All code products will be first developed and released as testnet prototypes which are then matured into production-ready status as the target activation date approaches. 
+All code products are first developed and released as testnet prototypes (such as our [Feature Nets](https://shieldedlabs.net/crosslink-incentivized-feature-nets/)) which are then matured into production-ready status during the current productionization phase (see [Status](../overview.md#status)).
 
 ## Technical Documentation
 

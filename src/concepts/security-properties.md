@@ -1,6 +1,6 @@
 # Crosslink Security Properties
 
-Crosslink is designed and can be analyzed with respect to the following security properties:
+Crosslink is designed and can be analyzed with respect to the following security properties. See [Design Analysis](../analysis.md) for frameworks and results analyzing them.
 
 ## _Irreversible Finality_
 
@@ -8,9 +8,11 @@ Transactions enter a finalized state, and finalized transactions cannot be rolle
 
 Importantly, all participants who are sufficiently in sync with the consensus agree on finality status, or if there is a failure by the protocol to provide finality, all of those participants agree that this failure occurred. This contrasts with PoW which provides “probabilistic finality” and subtly this means every participant must select their own rollback threshold at which point they consider a protocol failure event to have occurred (including potential malicious “rollback attacks”). Because these thresholds vary over users, rollbacks naturally fragment users into groups with competing interests in the event of protocol failures.
 
+See [Crosslink Finality](./terminology.md#crosslink-finality) for the specific kind of finality Crosslink provides, and the [Design Overview §9 Sticky Fork Choice](../crosslink-design-overview-20260914.md#section-9) for how nodes enforce it.
+
 ## _Liveness/Availability_
 
- It is possible for any user to get at least some of their transactions paying sufficiently high fees to be included in one of the next few blocks. Failure of this security property is called a “denial-of-service for blockspace attack” (aka “blockspace DoS”). Two example attacks illustrate different attack approaches: in one case, an attacker has enough mining capacity to exclude all transactions (except perhaps their own); in another approach an attacker pays fees higher than any legitimate user for so many transactions that any other user cannot effectively get any of their transactions included.
+It is possible for any user to get at least some of their transactions paying sufficiently high fees to be included in one of the next few blocks. Failure of this security property is called a “denial-of-service for blockspace attack” (aka “blockspace DoS”). Two example attacks illustrate different attack approaches: in one case, an attacker has enough mining capacity to exclude all transactions (except perhaps their own); in another approach an attacker pays fees higher than any legitimate user for so many transactions that any other user cannot effectively get any of their transactions included.
 
 ## _Finality Progress_
 
@@ -24,10 +26,10 @@ Broadly speaking, an adversary may have a “censorship policy” based on a var
 
 Because censorship (and other privacy attacks) often rely on a wide array of data sources, practical protection also relies on a wide array of techniques and technologies out of scope for Crosslink’s design. One key area where we assume supporting defensive technologies (such as mixnets) is around network privacy for wallets (especially) and potentially other Crosslink infrastructure.
 
+### Converting Censorship Attacks into Stall Attacks
+
+What is the difference between liveness and censorship-resistance? The difference is whether specific transactions are targeted (a censorship attack) or not (a stall attack). An important fact is that a stall attack would be immediately noticed and a wide set of users would be able to agree that the stall attack is happening. In contrast, a censorship attack would tend to go unnoticed except by the victims, and it might be difficult to achieve widespread recognition that it had happened. For this reason, part of the design of Crosslink is intended to “convert censorship attacks into stall attacks” – make it impossible for an attacker to censor targeted transactions without causing the entire service to stall.
+
 ## _Supply-integrity_
 
-The total supply of ZEC is correct and any user can verify that it is correct. Failure of this security property is called “counterfeiting attack”.
-
-**TODO: Where does the following live?**
-
-What is the difference between liveness and censorship-resistance? The difference is whether specific transactions are targeted (a censorship attack) or (a stall attack). An important fact is that a stall attack would be immediately noticed and a wide set of users would be able to agree that the stall attack is happening. In contrast, a censorship attack would tend to go unnoticed except by the victims, and it might be difficult to achieve widespread recognition that it had happened. For this reason, part of the design of Crosslink is intended to “convert censorship attacks into stall attacks” – make it impossible for an attacker to censor targeted transactions without causing the entire service to stall.
+The total supply of ZEC is correct and any user can verify that it is correct. Failure of this security property is called “counterfeiting attack”. See [The ZEC Supply Policy](../spec/rewards-distribution.md#the-zec-supply-policy) for the broader set of `ZEC` supply characteristics Crosslink must preserve.
