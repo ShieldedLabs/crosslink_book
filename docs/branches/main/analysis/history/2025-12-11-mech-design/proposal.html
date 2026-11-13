@@ -1,0 +1,341 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Proposal - Zcash Crosslink: A Visual Tour</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../../favicon.svg">
+        <link rel="shortcut icon" href="../../../favicon.png">
+        <link rel="stylesheet" href="../../../css/variables.css">
+        <link rel="stylesheet" href="../../../css/general.css">
+        <link rel="stylesheet" href="../../../css/chrome.css">
+        <link rel="stylesheet" href="../../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../../highlight.css">
+        <link rel="stylesheet" href="../../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../../overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../overview/scope.html"><strong aria-hidden="true">1.1.</strong> Scope and Goals</a></li><li class="chapter-item expanded "><a href="../../../overview/design.html"><strong aria-hidden="true">1.2.</strong> Design Overview</a></li><li class="chapter-item expanded "><a href="../../../overview/deliverables.html"><strong aria-hidden="true">1.3.</strong> Engineering Deliverables</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Design Concepts</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../concepts/five-component-model.html"><strong aria-hidden="true">2.1.</strong> The Five Component Model</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../concepts/user-led-emergency-hardforks.html"><strong aria-hidden="true">2.1.1.</strong> User-Led Emergency Hardforks</a></li></ol></li><li class="chapter-item expanded "><a href="../../../concepts/consensus-verifiability.html"><strong aria-hidden="true">2.2.</strong> Consensus Verifiability</a></li><li class="chapter-item expanded "><a href="../../../concepts/ledger-state.html"><strong aria-hidden="true">2.3.</strong> Ledger State</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.4.</strong> Incentives Model</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../concepts/finality-and-incentives.html"><strong aria-hidden="true">2.4.1.</strong> Finality & Incentives</a></li></ol></li><li class="chapter-item expanded "><a href="../../../concepts/security-properties.html"><strong aria-hidden="true">2.5.</strong> Security Properties</a></li><li class="chapter-item expanded "><a href="../../../concepts/terminology.html"><strong aria-hidden="true">2.6.</strong> Terminology</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Design Specification</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../spec/rewards-distribution.html"><strong aria-hidden="true">3.1.</strong> Rewards Distribution</a></li><li class="chapter-item expanded "><a href="../../../spec/bond-actions-and-states.html"><strong aria-hidden="true">3.2.</strong> Bond Actions and States</a></li><li class="chapter-item expanded "><a href="../../../crosslink-design-overview-20260914.html"><strong aria-hidden="true">3.3.</strong> Zebra Crosslink: Design Overview 2026-09-14</a></li></ol></li><li class="chapter-item expanded "><a href="../../../analysis.html"><strong aria-hidden="true">4.</strong> Design Analysis</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../analysis/penalty-for-failure-to-defend.html"><strong aria-hidden="true">4.1.</strong> Penalty for Failure to Defend</a></li><li class="chapter-item expanded "><a href="../../../analysis/history.html"><strong aria-hidden="true">4.2.</strong> Design Analysis History</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../analysis/history/2025-12-11-mech-design.html"><strong aria-hidden="true">4.2.1.</strong> 2025-12-11: Mechanism Design Audit</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../analysis/history/2025-12-11-mech-design/proposal.html" class="active"><strong aria-hidden="true">4.2.1.1.</strong> Proposal</a></li></ol></li></ol></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">5.</strong> Design Guides</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../guides/tour.html"><strong aria-hidden="true">5.1.</strong> A Visual Tour of Zcash Crosslink</a></li><li class="chapter-item expanded "><a href="../../../guides/tfl-lexicon.html"><strong aria-hidden="true">5.2.</strong> A Visual Lexicon of the TFL Book</a></li><li class="chapter-item expanded "><a href="../../../guides/finality-and-fork-choice.html"><strong aria-hidden="true">5.3.</strong> A Visual Guide to Finality and Fork Choice</a></li></ol></li><li class="chapter-item expanded "><li class="spacer"></li><li class="chapter-item expanded "><div><strong aria-hidden="true">6.</strong> APPENDIX: Editing This Book</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../../editing/writing-style.html"><strong aria-hidden="true">6.1.</strong> Writing Style</a></li><li class="chapter-item expanded "><a href="../../../editing/mermaid-styles.html"><strong aria-hidden="true">6.2.</strong> Mermaid Common Styles</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Zcash Crosslink: A Visual Tour</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="proposal-mechanism-design-audit-of-crosslink-zebra"><a class="header" href="#proposal-mechanism-design-audit-of-crosslink-zebra">Proposal: Mechanism Design Audit of Crosslink Zebra</a></h1>
+<blockquote>
+<p><strong>Note:</strong> This proposal is preserved verbatim as pre-registered (minus budget details), so the scope cannot drift after the fact. The only changes are to links: references to "this book" now point to the <a href="https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design.md">archived revision of the book</a> as it existed when the proposal was committed, since the book has since been reorganized.</p>
+</blockquote>
+<p>Prepared for: Shielded Labs
+Duration: 1 week core analysis + light follow‑up outreach</p>
+<h2 id="objective"><a class="header" href="#objective">Objective</a></h2>
+<p>Shielded Labs is designing and stewarding Crosslink v2 (Crosslink 2 consensus plus updated staking economics). This proposal covers a mechanism design–focused audit that:</p>
+<ul>
+<li>Evaluates the incentive structure faced by miners, finalizers, stakers, and the wider community.</li>
+<li>Assesses the Penalty for Failure to Defend (PFD) for key properties (safety, liveness, censorship resistance).</li>
+<li>Identifies likely equilibria and failure modes under realistic behavior.</li>
+<li>Produces clear recommendations to harden Crosslink v2 before or shortly after deployment.</li>
+<li>The work will be completed over one week, followed by targeted outreach so results can inform the broader Zcash ecosystem.</li>
+</ul>
+<h2 id="scope"><a class="header" href="#scope">Scope</a></h2>
+<p>In scope: Crosslink Zebra as defined by Shielded Labs, specifically defined in this book in the <a href="https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design.md">Design</a> chapter.</p>
+<h2 id="questions-to-answer"><a class="header" href="#questions-to-answer">Questions to answer:</a></h2>
+<ul>
+<li>What behaviors are rational for miners, finalizers, and stakers?</li>
+<li>What are the “good” and “bad” equilibria?</li>
+<li>How large is the effective PFD for safety, liveness, and censorship resistance?</li>
+<li>Where does the design rely on social courage instead of hard incentives?</li>
+<li>In general, what conditions are necessary to violate the security properties listed <a href="https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design/security-properties.md">Security Properties</a></li>
+</ul>
+<h3 id="out-of-scope"><a class="header" href="#out-of-scope">Out of scope</a></h3>
+<ul>
+<li>Cryptographic soundness of Zcash primitives.</li>
+<li>Implementation bugs in node software.</li>
+<li>Detailed macro‑economic modeling of ZEC price or off‑chain markets.</li>
+<li>Privacy impacts on stakers or finalizers. Privacy protection is a top priority for Zcash generally, and a priority for Crosslink analyses in the future. However, for this initial audit we first want to focus on the general safety and reliability of the base consensus mechanism. Note that there are a set of constraints on the mechanism design which are present in order to provide privacy, and these must be satisfied for any alternatives or recommendations. These are described in our blog post <a href="https://shieldedlabs.net/crosslink-updated-staking-design/">Crosslink: Updated Staking Design</a>.</li>
+</ul>
+<h2 id="deliverables"><a class="header" href="#deliverables">Deliverables</a></h2>
+<p>By the end of the one‑week analysis:</p>
+<ol>
+<li>Mechanism Design Audit Report (10–15 pages)</li>
+</ol>
+<ul>
+<li>Role‑by‑role incentive analysis (miners, finalizers, stakers, community).</li>
+<li>PFD analysis for core properties under representative attack scenarios.</li>
+<li>Identified “bad equilibria” (e.g., PoS cartelization).</li>
+<li>Prioritized recommendations with concrete levers (e.g., minimal penalties, tweaks to incentives to bolster against bad outcomes, delegation tweaks, governance formalization).</li>
+</ul>
+<ol start="2">
+<li>Executive Summary (2–3 pages)</li>
+</ol>
+<ul>
+<li>Non‑technical overview of risks, trade‑offs, and recommended changes, suitable for Shielded Labs leadership and partner orgs (ECC, ZF).</li>
+</ul>
+<ol start="3">
+<li>Slide Deck (15–20 slides)</li>
+</ol>
+<ul>
+<li>Visual summary of findings for internal review and community calls.</li>
+</ul>
+<ol start="4">
+<li>Outreach Draft</li>
+</ol>
+<ul>
+<li>Draft blog / forum post summarizing the results for the public Zcash community.</li>
+<li>Suggested agenda + talking points for a community call presenting the audit.</li>
+</ul>
+<h2 id="work-plan--timeline"><a class="header" href="#work-plan--timeline">Work Plan &amp; Timeline</a></h2>
+<p><strong>Day 1 – Kickoff &amp; Alignment</strong></p>
+<ul>
+<li>60–90 minute kickoff with Shielded Labs.</li>
+<li>Confirm canonical specs and design assumptions.</li>
+<li>Clarify constraints (e.g., “no protocol‑level slashing in V1”) and any specific questions.</li>
+<li>Finalize success criteria and deliverable format.</li>
+</ul>
+<p><strong>Days 2–4 – Mechanism Design Analysis</strong></p>
+<ul>
+<li>Map incentives for each role (miners, finalizers, stakers, community), given:
+<ul>
+<li>40/40 issuance split;</li>
+<li>5‑day epochs, 5–10 day unbonding;</li>
+<li>Emergency patch + hard‑fork constitution.</li>
+</ul>
+</li>
+<li>Identify likely equilibria and failure modes (cartels, PoS capture, unbounded divergence between PoW progress and a stalled BFT subprotocol, etc.).</li>
+<li>Qualitative PFD modeling for safety, liveness, and censorship resistance; comparison to Zcash PoW‑only at the same issuance rate.</li>
+</ul>
+<p><strong>Day 5 – Recommendations &amp; Drafts</strong></p>
+<ul>
+<li>Translate analysis into concrete, ranked recommendations (high / medium / low impact &amp; complexity).</li>
+<li>Produce draft audit report and executive summary.</li>
+</ul>
+<p><strong>Day 6 – Review &amp; Finalization</strong></p>
+<ul>
+<li>Share drafts with a small Shielded Labs review group.</li>
+<li>Incorporate feedback and finalize:
+<ul>
+<li>Audit report</li>
+<li>Executive summary</li>
+<li>Slide deck</li>
+</ul>
+</li>
+</ul>
+<p><strong>Day 7 – Outreach Prep</strong></p>
+<ul>
+<li>Draft blog / forum post and call agenda.</li>
+<li>Finalize outreach materials in collaboration with Shielded Labs communications.</li>
+</ul>
+<h2 id="outreach--followup"><a class="header" href="#outreach--followup">Outreach &amp; Follow‑up</a></h2>
+<p>Within the same budget:</p>
+<ul>
+<li><strong>One live presentation</strong> of findings (e.g., Zcash community call or internal Shielded Labs session).</li>
+<li><strong>Asynchronous Q&amp;A</strong> on the report (e.g., GitHub, forum thread) for 1–2 weeks after publication.</li>
+<li>Minor updates to slides and outreach text in response to initial feedback (no new analysis).</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../../analysis/history/2025-12-11-mech-design.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../../guides/tour.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../../analysis/history/2025-12-11-mech-design.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../../guides/tour.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../../elasticlunr.min.js"></script>
+        <script src="../../../mark.min.js"></script>
+        <script src="../../../searcher.js"></script>
+
+        <script src="../../../clipboard.min.js"></script>
+        <script src="../../../highlight.js"></script>
+        <script src="../../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../../../mermaid.min.js"></script>
+        <script src="../../../mermaid-init.js"></script>
+        <script src="../../../mermaid-common-styles.js"></script>
+
+
+    </div>
+    </body>
+</html>
