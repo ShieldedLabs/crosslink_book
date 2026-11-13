@@ -6,6 +6,7 @@
   - [Consensus Verifiability](./concepts/consensus-verifiability.md)
   - [Incentives Model]()
     - [Finality & Incentives](./concepts/finality-and-incentives.md)
+  - [Security Properties](./concepts/security-properties.md)
   - [Terminology](./concepts/terminology.md)
 - [Design Specification]()
   - [Rewards Distribution](./spec/rewards-distribution.md)
@@ -27,7 +28,6 @@
   - [five-component-model.md](./old-design/five-component-model.md)
   - [nutshell.md](./old-design/nutshell.md)
   - [scoping.md](./old-design/scoping.md)
-  - [security-properties.md](./old-design/security-properties.md)
   - [userled-emergency-hardforks.md](./old-design/userled-emergency-hardforks.md)
 
 ---
