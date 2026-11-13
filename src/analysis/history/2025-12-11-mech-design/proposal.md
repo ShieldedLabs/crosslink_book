@@ -1,5 +1,7 @@
 # Proposal: Mechanism Design Audit of Crosslink Zebra
 
+> **Note:** This proposal is preserved verbatim as pre-registered (minus budget details), so the scope cannot drift after the fact. The only changes are to links: references to "this book" now point to the [archived revision of the book](https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design.md) as it existed when the proposal was committed, since the book has since been reorganized.
+
 Prepared for: Shielded Labs
 Duration: 1 week core analysis + light follow‑up outreach
 
@@ -15,7 +17,7 @@ Shielded Labs is designing and stewarding Crosslink v2 (Crosslink 2 consensus pl
 
 ## Scope
 
-In scope: Crosslink Zebra as defined by Shielded Labs, specifically defined in this book in the [Design](../../../../design.md) chapter.
+In scope: Crosslink Zebra as defined by Shielded Labs, specifically defined in this book in the [Design](https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design.md) chapter.
 
 ## Questions to answer:
 
@@ -23,14 +25,14 @@ In scope: Crosslink Zebra as defined by Shielded Labs, specifically defined in t
 - What are the “good” and “bad” equilibria?
 - How large is the effective PFD for safety, liveness, and censorship resistance?
 - Where does the design rely on social courage instead of hard incentives?
-- In general, what conditions are necessary to violate the security properties listed [Security Properties](../../../security-properties.md)
+- In general, what conditions are necessary to violate the security properties listed [Security Properties](https://github.com/ShieldedLabs/zebra-crosslink/blob/5f1d1123ade8e9e6628574f54732beb859cd94b6/book/src/design/security-properties.md)
 
 ### Out of scope
 
 - Cryptographic soundness of Zcash primitives.
 - Implementation bugs in node software.
 - Detailed macro‑economic modeling of ZEC price or off‑chain markets.
-- Privacy impacts on stakers or finalizers. Privacy protection is a top priority for Zcash generally, and a priority for Crosslink analyses in the future. However, for this initial audit we first want to focus on the general safety and reliability of the base consensus mechanism. Note that there are a set of constraints on the mechanism design which are present in order to provide privacy, and these must be satisfied for any alternatives or recommendations. These are described in our blog post Crosslink: Updated Staking Design.
+- Privacy impacts on stakers or finalizers. Privacy protection is a top priority for Zcash generally, and a priority for Crosslink analyses in the future. However, for this initial audit we first want to focus on the general safety and reliability of the base consensus mechanism. Note that there are a set of constraints on the mechanism design which are present in order to provide privacy, and these must be satisfied for any alternatives or recommendations. These are described in our blog post [Crosslink: Updated Staking Design](https://shieldedlabs.net/crosslink-updated-staking-design/).
 
 ## Deliverables
 

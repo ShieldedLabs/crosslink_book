@@ -1,10 +1,16 @@
 # User-Led Emergency Hardforks
 
-In [The Five Component Model](five-component-model.md) we describe a key role of users is their governance capability to initiate a user-led hardfork in the event of an emergency.
+In [The Five Component Model](./five-component-model.md) we describe that a key role of users is their governance capability to initiate a user-led hardfork in the event of an emergency.
 
 In the context of Crosslink, we believe it's beneficial to gain community agreement on a norm for when such emergency hardforks are called for. Having an up-front agreement can help reduce confusion, debate, or contention during specific kinds of emergencies.
 
-## A Proposed Governance ZIP for the Use of an Emergency User-Led Hard Fork to Correct Layer-1 Security Failures
+The current Crosslink design relies on this capability directly: there is no in-protocol slashing, and instead punishment of stake behind misbehaving finalizers is a user-coordinated hard fork driven by a node configuration. See [Social Slashing](../crosslink-design-overview-20260914.md#section-16) in the Design Overview for its mechanics. The proposed norm below is intended to bound when such a fork, or any other emergency user-led hard fork, is legitimate.
+
+**TODO:** Reconcile this norm with the slash fork scenarios in the Design Overview. In particular, a "spring cleaning" slash fork (removing permanently absent finalizers when there is no stall) may not clearly fall within the layer-1 security failure grounds below.
+
+## A Proposed Norm for the Use of an Emergency User-Led Hard Fork to Correct Layer-1 Security Failures
+
+The following text is drafted in the style of a potential Governance ZIP.
 
 An emergency user-led hard fork is an extraordinary intervention that reflects a core value of cryptocurrencies: the ability of users to assert sovereignty over the protocol in response to a failure of its most fundamental security guarantees. This form of intervention is distinct from ordinary network upgrades, which change consensus rules prospectively and only with broad user acceptance. Because an emergency user-led hard fork carries significant social, economic, and political consequences, the Zcash community should establish a clear and limited social consensus in advance about when it is legitimate. 
 
