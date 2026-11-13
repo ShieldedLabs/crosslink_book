@@ -1,6 +1,7 @@
 # Summary
 
 - [Overview](./overview.md)
+  - [Design Overview](./overview/design.md)
 - [Design Concepts]()
   - [Consensus Verifiability](./concepts/consensus-verifiability.md)
   - [Incentives Model]()
