@@ -7,6 +7,6 @@ This chapter collects frameworks and results for analyzing the safety and securi
 
 ## Security Analysis of Crosslink 2
 
-The abstract [Crosslink 2](https://daira.github.io/tfl-book/design/crosslink.html) construction which this design adapts has its own liveness and safety analysis in the TFL Book: [Security Analysis of Crosslink 2](https://daira.github.io/tfl-book/design/crosslink/security-analysis.html).
+The abstract [Crosslink 2](https://daira.github.io/tfl-book/design/crosslink.html) construction which this design adapts (defined in [The Crosslink 2 Construction](https://daira.github.io/tfl-book/design/crosslink/construction.html)) has its own liveness and safety analysis in the TFL Book: [Security Analysis of Crosslink 2](https://daira.github.io/tfl-book/design/crosslink/security-analysis.html).
 
 That analysis applies to the abstract construction, and the extensions and changes described in our [Design Overview](./overview/design.md) may violate some of its assumptions. Identifying where our design diverges from those assumptions is ongoing work.
